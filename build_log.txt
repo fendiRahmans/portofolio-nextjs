@@ -1,0 +1,194 @@
+﻿
+> portofolio-nextjs@0.1.0 build
+> next build
+
+node.exe : ΓÜá Warnin
+g: Next.js inferred y
+our workspace root, b
+ut it may not be corr
+ect.
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Program Files\nodejs
+/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (ΓÜá War   
+ ning: Ne...not b    
+e correct.:Strin    g
+) [], RemoteExc    ep
+tion
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+ We detected multiple
+ lockfiles and select
+ed the directory of C
+:\Project\Pribadi\pac
+kage-lock.json as the
+ root directory.
+ To silence this warn
+ing, set `turbopack.r
+oot` in your Next.js 
+config, or consider r
+emoving one of the lo
+ckfiles if it's not n
+eeded.
+   See https://nextjs
+.org/docs/app/api-ref
+erence/config/next-co
+nfig-js/turbopack#roo
+t-directory for more 
+information.
+ Detected additional 
+lockfiles: 
+   * C:\Project\Priba
+di\portofolio-nextjs\
+package-lock.json
+
+Γû▓ Next.js 16.1.2 (Turbopack)
+
+  Creating an optimized production build ...
+
+> Build error occurre
+d
+Error: Turbopack buil
+d failed with 1 error
+s:
+./portofolio-nextjs/a
+pp/globals.css
+Error evaluating Node
+.js code
+CssSyntaxError: C:\Pr
+oject\Pribadi\portofo
+lio-nextjs\app\global
+s.css:102:1: Unexpect
+ed }
+    at Input.error (p
+ortofolio-nextjs/node
+_modules/postcss/lib/
+input.js:135:16) [C:\
+Project\Pribadi\porto
+folio-nextjs\.next\bu
+ild\chunks\7e014_109c
+ada9._.js:4651:22]
+    at Parser.unexpec
+tedClose (portofolio-
+nextjs/node_modules/p
+ostcss/lib/parser.js:
+587:22) [C:\Project\P
+ribadi\portofolio-nex
+tjs\.next\build\chunk
+s\7e014_109cada9._.js
+:5820:26]
+    at Parser.end (po
+rtofolio-nextjs/node_
+modules/postcss/lib/p
+arser.js:330:12) [C:\
+Project\Pribadi\porto
+folio-nextjs\.next\bu
+ild\chunks\7e014_109c
+ada9._.js:5593:18]
+    at Parser.parse (
+portofolio-nextjs/nod
+e_modules/postcss/lib
+/parser.js:456:16) [C
+:\Project\Pribadi\por
+tofolio-nextjs\.next\
+build\chunks\7e014_10
+9cada9._.js:5704:26]
+    at parse (portofo
+lio-nextjs/node_modul
+es/postcss/lib/parse.
+js:11:12) [C:\Project
+\Pribadi\portofolio-n
+extjs\.next\build\chu
+nks\7e014_109cada9._.
+js:5853:16]
+    at new LazyResult
+ (portofolio-nextjs/n
+ode_modules/postcss/l
+ib/lazy-result.js:165
+:16) [C:\Project\Prib
+adi\portofolio-nextjs
+\.next\build\chunks\7
+e014_109cada9._.js:61
+05:24]
+    at Processor.proc
+ess (portofolio-nextj
+s/node_modules/postcs
+s/lib/processor.js:53
+:14) [C:\Project\Prib
+adi\portofolio-nextjs
+\.next\build\chunks\7
+e014_109cada9._.js:65
+72:20]
+    at transform (tur
+bopack:///[turbopack-
+node]/transforms/post
+css.ts:70:51) [C:\Pro
+ject\Pribadi\portofol
+io-nextjs\.next\build
+\chunks\[root-of-the-
+server]__d77bd3c0._.j
+s:146:52]
+    at run (turbopack
+:///[turbopack-node]/
+ipc/evaluate.ts:92:29
+) [C:\Project\Pribadi
+\portofolio-nextjs\.n
+ext\build\chunks\[roo
+t-of-the-server]__59b
+9d98a._.js:443:37]
+    at run (turbopack
+:///[turbopack-node]/
+ipc/evaluate.ts:115:1
+1) [C:\Project\Pribad
+i\portofolio-nextjs\.
+next\build\chunks\[ro
+ot-of-the-server]__59
+b9d98a._.js:464:25]
+
+Import trace:
+  Client Component Br
+owser:
+    ./portofolio-next
+js/app/globals.css [C
+lient Component Brows
+er]
+    ./portofolio-next
+js/app/layout.tsx [Se
+rver Component]
+
+
+    at transform (tur
+bopack:///[turbopack-
+node]/transforms/post
+css.ts:70:51) [C:\Pro
+ject\Pribadi\portofol
+io-nextjs\.next\build
+\chunks\[root-of-the-
+server]__d77bd3c0._.j
+s:146:52])
+    at run (turbopack
+:///[turbopack-node]/
+ipc/evaluate.ts:92:29
+) [C:\Project\Pribadi
+\portofolio-nextjs\.n
+ext\build\chunks\[roo
+t-of-the-server]__59b
+9d98a._.js:443:37])
+    at run (turbopack
+:///[turbopack-node]/
+ipc/evaluate.ts:115:1
+1) [C:\Project\Pribad
+i\portofolio-nextjs\.
+next\build\chunks\[ro
+ot-of-the-server]__59
+b9d98a._.js:464:25])
