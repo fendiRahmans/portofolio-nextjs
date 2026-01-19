@@ -23,7 +23,7 @@ export default function Dock({ items }: DockProps) {
     { icon: "home", label: "Home", href: "/" },
     { icon: "person", label: "About", href: "/about" },
     { icon: "grid_view", label: "Career Path", href: "/career" },
-    { icon: "mail", label: "Contact", href: "/#contact" },
+    { icon: "mail", label: "Contact", href: "/contact" },
     { icon: "calendar_month", label: "Book", href: "/#book", variant: "primary" },
   ];
 
