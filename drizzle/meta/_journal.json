@@ -8,6 +8,27 @@
       "when": 1768896699483,
       "tag": "0000_careless_dormammu",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1768898121117,
+      "tag": "0001_polite_silverclaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768902157711,
+      "tag": "0002_famous_magneto",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1768903431892,
+      "tag": "0003_shallow_mystique",
+      "breakpoints": true
     }
   ]
 }
