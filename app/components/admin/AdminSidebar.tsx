@@ -14,6 +14,7 @@ const sidebarItems: SidebarItem[] = [
   { icon: "dashboard", label: "Dashboard", href: "/admin/dashboard" },
   { icon: "layers", label: "Tech Stack", href: "/admin/tech-stack" },
   { icon: "work_history", label: "Career", href: "/admin/career" },
+  { icon: "mail", label: "Messages", href: "/admin/contact" },
   { icon: "settings", label: "Settings", href: "/admin/settings" },
 ];
 
