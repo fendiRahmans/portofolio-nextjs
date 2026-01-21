@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import LogoutButton from "./LogoutButton";
 
 interface AdminHeaderProps {
   title: string;
@@ -26,6 +27,11 @@ export default function AdminHeader({ title, subtitle }: AdminHeaderProps) {
             person
           </span>
         </div>
+
+        {/* Divider */}
+        <div className="h-8 w-px bg-white/10 mx-2"></div>
+
+        <LogoutButton />
       </div>
     </header>
   );

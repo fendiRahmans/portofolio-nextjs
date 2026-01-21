@@ -18,8 +18,17 @@ const sidebarItems: SidebarItem[] = [
   { icon: "settings", label: "Settings", href: "/admin/settings" },
 ];
 
+import { logout } from "@/actions/auth";
+
+// ... existing code ...
+
 export default function AdminSidebar() {
   const pathname = usePathname();
+
+  const handleLogout = async () => {
+    localStorage.removeItem("admin_token");
+    await logout();
+  };
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 glass-panel border-r border-white/10 z-40 flex flex-col">
@@ -68,13 +77,13 @@ export default function AdminSidebar() {
 
       {/* Logout Section */}
       <div className="p-4 border-t border-white/10">
-        <Link
-          href="/admin/login"
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300 text-left"
         >
           <span className="material-symbols-outlined text-[20px]">logout</span>
           <span className="font-medium text-sm">Logout</span>
-        </Link>
+        </button>
       </div>
     </aside>
   );

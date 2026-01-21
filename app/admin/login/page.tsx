@@ -1,37 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect } from "react";
 import Background from "../../components/Background";
 import Link from "next/link";
 import { Label } from "../../components/ui/Label";
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
+import { login, LoginState } from "@/actions/auth";
+import { useRouter } from "next/navigation";
+
+const initialState: LoginState = {
+  error: "",
+  fieldErrors: {},
+};
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [state, action, isPending] = useActionState(login, initialState);
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    // Basic validation
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
+  useEffect(() => {
+    if (state.success && state.token) {
+      localStorage.setItem("admin_token", state.token);
+      router.push("/admin/dashboard");
     }
-
-    setIsLoading(true);
-
-    // TODO: Implement actual authentication logic
-    setTimeout(() => {
-      setIsLoading(false);
-      // Placeholder - will be replaced with real auth
-      setError("Authentication not yet implemented");
-    }, 1000);
-  };
+  }, [state.success, state.token, router]);
 
   return (
     <div className="bg-background-dark text-white font-display min-h-screen relative overflow-hidden">
@@ -58,50 +50,50 @@ export default function AdminLogin() {
             </div>
 
             {/* Error Message */}
-            {error && (
+            {state?.error && (
               <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-                {error}
+                {state.error}
               </div>
             )}
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form action={action} className="space-y-6">
               {/* Email Field */}
               <div className="space-y-1">
                 <Label htmlFor="email">Email Address</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   icon="mail"
                   placeholder="admin@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                // required // Zod handles validation
                 />
+                {state?.fieldErrors?.email && (
+                  <p className="text-xs text-red-400 mt-1">{state.fieldErrors.email[0]}</p>
+                )}
               </div>
 
               {/* Password Field */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <button
-                    type="button"
-                    className="text-xs text-primary/80 hover:text-primary transition-colors mb-2"
-                  >
-                    Forgot password?
-                  </button>
                 </div>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   icon="lock"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                // required // Zod handles validation
                 />
+                {state?.fieldErrors?.password && (
+                  <p className="text-xs text-red-400 mt-1">{state.fieldErrors.password[0]}</p>
+                )}
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" isLoading={isLoading} icon="arrow_forward">
+              <Button type="submit" isLoading={isPending} icon="arrow_forward">
                 Sign In
               </Button>
             </form>
@@ -109,9 +101,6 @@ export default function AdminLogin() {
             {/* Divider */}
             <div className="flex items-center gap-4 my-8">
               <div className="flex-1 h-px bg-white/10"></div>
-              <span className="text-white/30 text-sm uppercase tracking-widest text-[10px] font-bold">
-                or
-              </span>
               <div className="flex-1 h-px bg-white/10"></div>
             </div>
 
