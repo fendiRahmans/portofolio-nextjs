@@ -5,9 +5,10 @@ import { Dialog } from "../ui/Dialog";
 import { Input } from "../ui/Input";
 import { Label } from "../ui/Label";
 import { Button } from "../ui/Button";
+import { techStackSchema } from "@/lib/validations";
 
 export interface TechStackItem {
-  id: string;
+  id: number;
   title: string;
   description: string;
   iconName: string;
@@ -37,6 +38,7 @@ export const TechStackFormDialog = ({
     iconColor: "#ffffff",
     bgColor: "#195de6",
   });
+  const [errors, setErrors] = useState<{ [key: string]: string[] | undefined }>({});
 
   // Reset form when dialog opens/closes or initialData changes
   useEffect(() => {
@@ -58,11 +60,21 @@ export const TechStackFormDialog = ({
           bgColor: "#195de6",
         });
       }
+      setErrors({});
     }
   }, [isOpen, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const result = techStackSchema.safeParse(formData);
+
+    if (!result.success) {
+      setErrors(result.error.flatten().fieldErrors);
+      return;
+    }
+
+    setErrors({});
     onSubmit(formData);
   };
 
@@ -88,8 +100,11 @@ export const TechStackFormDialog = ({
               setFormData({ ...formData, title: e.target.value })
             }
             placeholder="e.g. Next.js"
-            required
+
           />
+          {errors.title && (
+            <p className="text-red-400 text-xs">{errors.title[0]}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -104,8 +119,11 @@ export const TechStackFormDialog = ({
               setFormData({ ...formData, description: e.target.value })
             }
             placeholder="e.g. App Router, SSR, Server Actions"
-            required
+
           />
+          {errors.description && (
+            <p className="text-red-400 text-xs">{errors.description[0]}</p>
+          )}
         </div>
 
         {/* Icon Name */}
@@ -120,8 +138,11 @@ export const TechStackFormDialog = ({
               setFormData({ ...formData, iconName: e.target.value })
             }
             placeholder="e.g. code_blocks, layers, palette"
-            required
+
           />
+          {errors.iconName && (
+            <p className="text-red-400 text-xs">{errors.iconName[0]}</p>
+          )}
           <p className="text-white/40 text-xs">
             Browse icons at{" "}
             <a
