@@ -35,6 +35,7 @@ interface CareerFormDialogProps {
   onSubmit: (data: Omit<CareerItem, "id">) => void;
   initialData?: CareerItem;
   isLoading?: boolean;
+  errors?: Record<string, string[]>;
 }
 
 const colorOptions: { value: CareerColor; label: string; class: string }[] = [
@@ -53,6 +54,7 @@ export const CareerFormDialog = ({
   onSubmit,
   initialData,
   isLoading = false,
+  errors,
 }: CareerFormDialogProps) => {
   const [formData, setFormData] = useState({
     year: "",
@@ -185,8 +187,8 @@ export const CareerFormDialog = ({
                 setFormData({ ...formData, year: e.target.value })
               }
               placeholder="e.g. 2025 — Present"
-              required
             />
+            {errors?.year && <p className="text-red-400 text-xs mt-1">{errors.year[0]}</p>}
           </div>
 
           {/* Color */}
@@ -203,8 +205,8 @@ export const CareerFormDialog = ({
                     setFormData({ ...formData, color: option.value })
                   }
                   className={`size-8 rounded-lg ${option.class} transition-all duration-300 border-2 ${formData.color === option.value
-                      ? "border-white scale-110"
-                      : "border-transparent opacity-50 hover:opacity-100"
+                    ? "border-white scale-110"
+                    : "border-transparent opacity-50 hover:opacity-100"
                     }`}
                   title={option.label}
                 />
@@ -225,8 +227,8 @@ export const CareerFormDialog = ({
               setFormData({ ...formData, title: e.target.value })
             }
             placeholder="e.g. Izidok & Hitalent"
-            required
           />
+          {errors?.title && <p className="text-red-400 text-xs mt-1">{errors.title[0]}</p>}
         </div>
 
         {/* Subtitle */}
@@ -241,8 +243,8 @@ export const CareerFormDialog = ({
               setFormData({ ...formData, subtitle: e.target.value })
             }
             placeholder="e.g. Lead Fullstack & Mobile Architect"
-            required
           />
+          {errors?.subtitle && <p className="text-red-400 text-xs mt-1">{errors.subtitle[0]}</p>}
         </div>
 
         {/* Description */}
@@ -257,10 +259,11 @@ export const CareerFormDialog = ({
               setFormData({ ...formData, description: e.target.value })
             }
             placeholder="Describe your role and achievements..."
-            required
+
             rows={3}
             className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all duration-300 resize-none"
           />
+          {errors?.description && <p className="text-red-400 text-xs mt-1">{errors.description[0]}</p>}
         </div>
 
         {/* Icon */}
@@ -273,8 +276,8 @@ export const CareerFormDialog = ({
             value={formData.icon}
             onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
             placeholder="e.g. devices, code_blocks, apartment"
-            required
           />
+          {errors?.icon && <p className="text-red-400 text-xs mt-1">{errors.icon[0]}</p>}
           <p className="text-white/40 text-xs">
             Browse icons at{" "}
             <a
