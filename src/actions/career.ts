@@ -119,3 +119,32 @@ export async function deleteCareer(id: number) {
     return { success: false, error: "Failed to delete career" };
   }
 }
+
+export async function getCareerCount() {
+  try {
+    const data = await db.select().from(career);
+    return data.length;
+  } catch (error) {
+    console.error("Error counting careers:", error);
+    return 0;
+  }
+}
+
+export async function getCareerCountThisMonth() {
+  try {
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const data = await db.select().from(career);
+    const thisMonthData = data.filter(item => {
+      if (!item.createdAt) return false;
+      const createdDate = new Date(item.createdAt);
+      return createdDate >= firstDayOfMonth;
+    });
+
+    return thisMonthData.length;
+  } catch (error) {
+    console.error("Error counting careers this month:", error);
+    return 0;
+  }
+}

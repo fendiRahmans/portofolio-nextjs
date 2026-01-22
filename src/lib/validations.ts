@@ -38,3 +38,10 @@ export const careerSchema = z.object({
 });
 
 export type CareerSchema = z.infer<typeof careerSchema>;
+
+export const settingSchema = z.object({
+  name: z.string().min(1, "Setting name is required"),
+  value: z.string().min(1, "Setting value is required"),
+});
+
+export type SettingSchema = z.infer<typeof settingSchema>;

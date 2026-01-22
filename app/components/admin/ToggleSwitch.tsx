@@ -6,25 +6,27 @@ interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
+  disabled?: boolean;
 }
 
-export default function ToggleSwitch({ checked, onChange, label }: ToggleSwitchProps) {
+export default function ToggleSwitch({ checked, onChange, label, disabled }: ToggleSwitchProps) {
   return (
     <div className="flex items-center gap-3">
       <button
         type="button"
         role="switch"
         aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 ${checked
-            ? "bg-green-500/30 border-green-500/50"
-            : "bg-white/10 border-white/20"
-          } border`}
+        disabled={disabled}
+        onClick={() => !disabled && onChange(!checked)}
+        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 border ${checked
+          ? "bg-green-500/30 border-green-500/50"
+          : "bg-white/10 border-white/20"
+          } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <span
           className={`inline-block h-5 w-5 transform rounded-full transition-all duration-300 ${checked
-              ? "translate-x-6 bg-green-400 shadow-lg shadow-green-500/50"
-              : "translate-x-1 bg-white/60"
+            ? "translate-x-6 bg-green-400 shadow-lg shadow-green-500/50"
+            : "translate-x-1 bg-white/60"
             }`}
         />
       </button>

@@ -101,3 +101,13 @@ export async function deleteTechStack(id: number) {
     return { success: false, error: "Failed to delete tech stack" };
   }
 }
+
+export async function getTechStackCount() {
+  try {
+    const data = await db.select().from(techStack);
+    return data.length;
+  } catch (error) {
+    console.error("Error counting tech stacks:", error);
+    return 0;
+  }
+}

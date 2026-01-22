@@ -1,20 +1,93 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminHeader from "../../components/admin/AdminHeader";
 import StatCard from "../../components/admin/StatCard";
 import ToggleSwitch from "../../components/admin/ToggleSwitch";
+import { getAvailableForHire, toggleAvailableForHire } from "@/actions/settings";
+import { getTechStackCount } from "@/actions/tech-stack";
+import { getCareerCount, getCareerCountThisMonth } from "@/actions/career";
+import { getContactCount, getRecentContacts, getContactCountThisWeek } from "@/actions/contact";
+
+type Contact = {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+};
 
 export default function AdminDashboard() {
-  const [isAvailable, setIsAvailable] = useState(true);
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalTechnologies: 0,
+    totalProjects: 0,
+    totalContacts: 0,
+    projectsThisMonth: 0,
+    contactsThisWeek: 0,
+  });
+  const [recentContacts, setRecentContacts] = useState<Contact[]>([]);
 
-  // Static data - in real app, this would come from database/API
-  const stats = {
-    totalTechnologies: 7,
-    totalProjects: 12,
-    totalContacts: 25,
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch all data in parallel
+      const [status, techCount, careerCount, contactCount, contacts, careerThisMonth, contactThisWeek] = await Promise.all([
+        getAvailableForHire(),
+        getTechStackCount(),
+        getCareerCount(),
+        getContactCount(),
+        getRecentContacts(3),
+        getCareerCountThisMonth(),
+        getContactCountThisWeek(),
+      ]);
+
+      setIsAvailable(status);
+      setStats({
+        totalTechnologies: techCount,
+        totalProjects: careerCount,
+        totalContacts: contactCount,
+        projectsThisMonth: careerThisMonth,
+        contactsThisWeek: contactThisWeek,
+      });
+
+      if (contacts.success) {
+        setRecentContacts(contacts.data);
+      }
+
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const handleToggle = async (checked: boolean) => {
+    setIsAvailable(checked);
+    const result = await toggleAvailableForHire(checked);
+    if (!result.success) {
+      setIsAvailable(!checked); // Revert on failure
+    }
   };
+
+  const getRelativeTime = (date: Date | null) => {
+    if (!date) return "N/A";
+
+    const now = new Date();
+    const diffMs = now.getTime() - new Date(date).getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return new Date(date).toLocaleDateString();
+  };
+
 
   return (
     <AdminLayout>
@@ -48,8 +121,9 @@ export default function AdminDashboard() {
               <div className="mt-3">
                 <ToggleSwitch
                   checked={isAvailable}
-                  onChange={setIsAvailable}
-                  label={isAvailable ? "Active" : "Inactive"}
+                  onChange={handleToggle}
+                  label={isLoading ? "Loading..." : (isAvailable ? "Active" : "Inactive")}
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -74,8 +148,8 @@ export default function AdminDashboard() {
             value={stats.totalProjects}
             subtitle="Completed works"
             trend={{
-              value: "+2 this month",
-              isPositive: true,
+              value: stats.projectsThisMonth > 0 ? `+${stats.projectsThisMonth} this month` : "No new projects",
+              isPositive: stats.projectsThisMonth > 0,
             }}
           />
 
@@ -88,8 +162,8 @@ export default function AdminDashboard() {
             value={stats.totalContacts}
             subtitle="Messages received"
             trend={{
-              value: "+5 this week",
-              isPositive: true,
+              value: stats.contactsThisWeek > 0 ? `+${stats.contactsThisWeek} this week` : "No new messages",
+              isPositive: stats.contactsThisWeek > 0,
             }}
           />
         </div>
@@ -151,50 +225,40 @@ export default function AdminDashboard() {
           </h2>
           <div className="glass-panel rounded-2xl overflow-hidden">
             <div className="divide-y divide-white/5">
-              {[
-                {
-                  name: "John Doe",
-                  email: "john@example.com",
-                  message: "Hi, I'm interested in your services...",
-                  time: "2 hours ago",
-                },
-                {
-                  name: "Jane Smith",
-                  email: "jane@company.com",
-                  message: "Would like to discuss a potential project...",
-                  time: "5 hours ago",
-                },
-                {
-                  name: "Mike Johnson",
-                  email: "mike@startup.io",
-                  message: "Great portfolio! Let's connect...",
-                  time: "1 day ago",
-                },
-              ].map((contact, index) => (
-                <div
-                  key={index}
-                  className="p-4 flex items-center justify-between hover:bg-white/5 transition-all duration-300 cursor-pointer"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                      <span className="text-primary font-semibold text-sm">
-                        {contact.name.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-white font-medium text-sm">
-                        {contact.name}
-                      </p>
-                      <p className="text-white/50 text-xs truncate max-w-[200px] md:max-w-[300px]">
-                        {contact.message}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-white/30 text-xs whitespace-nowrap">
-                    {contact.time}
+              {recentContacts.length === 0 ? (
+                <div className="p-8 text-center text-white/50">
+                  <span className="material-symbols-outlined text-[48px] mb-2">
+                    inbox
                   </span>
+                  <p>No messages yet</p>
                 </div>
-              ))}
+              ) : (
+                recentContacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className="p-4 flex items-center justify-between hover:bg-white/5 transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                        <span className="text-primary font-semibold text-sm">
+                          {contact.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-white font-medium text-sm">
+                          {contact.name}
+                        </p>
+                        <p className="text-white/50 text-xs truncate max-w-[200px] md:max-w-[300px]">
+                          {contact.message}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-white/30 text-xs whitespace-nowrap">
+                      {getRelativeTime(contact.createdAt)}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

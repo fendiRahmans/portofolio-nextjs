@@ -1,10 +1,16 @@
-export default function Hero() {
+import { getAvailableForHire } from "@/actions/settings";
+
+export default async function Hero() {
+  const isAvailable = await getAvailableForHire();
+
   return (
     <section className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 animate-fade-in">
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-6">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-        Available for hire
-      </div>
+      {isAvailable && (
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Available for hire
+        </div>
+      )}
       <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-b from-white via-white to-white/50 bg-clip-text text-transparent pb-2">
         Frontend Specialist & <br className="hidden md:block" /> Fullstack Developer
       </h1>
