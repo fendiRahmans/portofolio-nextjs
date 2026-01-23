@@ -45,3 +45,22 @@ export const settingSchema = z.object({
 });
 
 export type SettingSchema = z.infer<typeof settingSchema>;
+
+export const coreValueSchema = z.object({
+  icon: z.string().min(1, "Icon is required"),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+});
+
+export const aboutSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Title is required"),
+  location: z.string().min(1, "Location is required"),
+  imageUrl: z.string().url("Invalid image URL"),
+  narrativeTitle: z.string().min(1, "Narrative title is required"),
+  narrativeContent: z.string().min(1, "Narrative content is required"),
+  coreValues: z.array(coreValueSchema).optional().default([]),
+  interests: z.array(z.string()).optional().default([]),
+});
+
+export type AboutSchema = z.infer<typeof aboutSchema>;
