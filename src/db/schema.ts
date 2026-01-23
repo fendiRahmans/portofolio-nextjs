@@ -52,3 +52,17 @@ export const setting = mysqlTable('setting', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });
+
+export const about = mysqlTable('about', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  location: varchar('location', { length: 255 }).notNull(),
+  imageUrl: text('image_url').notNull(),
+  narrativeTitle: varchar('narrative_title', { length: 255 }).notNull(),
+  narrativeContent: text('narrative_content').notNull(),
+  coreValues: json('core_values').$type<{ icon: string; title: string; description: string }[]>(),
+  interests: json('interests').$type<string[]>(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});

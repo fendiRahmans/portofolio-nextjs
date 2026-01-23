@@ -43,6 +43,13 @@
       "when": 1768971458459,
       "tag": "0005_tense_bloodstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1769140408203,
+      "tag": "0006_clear_micromacro",
+      "breakpoints": true
     }
   ]
 }
