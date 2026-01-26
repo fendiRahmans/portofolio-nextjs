@@ -7,7 +7,7 @@ interface WorkCardProps {
   descriptions: string[];
   techStack: string[];
   icon: string;
-  color: "primary" | "cyan";
+  color: "primary" | "cyan" | "purple" | "amber" | "emerald" | "rose" | "indigo";
 }
 
 export default function WorkCard({
@@ -37,6 +37,51 @@ export default function WorkCard({
       titleHover: "group-hover:text-cyan-100",
       checkIcon: "text-cyan-500",
       borderHover: "hover:border-cyan-500/30",
+    },
+    purple: {
+      blobConfig: "bg-purple-500/10 -right-20 -top-20 group-hover:bg-purple-500/20",
+      iconBg: "bg-white/5 border-white/10",
+      iconColor: "text-purple-400",
+      period: "bg-white/5 border-white/10 text-white/60",
+      titleHover: "group-hover:text-purple-100",
+      checkIcon: "text-purple-500",
+      borderHover: "hover:border-purple-500/30",
+    },
+    amber: {
+      blobConfig: "bg-amber-500/10 -left-20 -bottom-20 group-hover:bg-amber-500/20",
+      iconBg: "bg-white/5 border-white/10",
+      iconColor: "text-amber-400",
+      period: "bg-white/5 border-white/10 text-white/60",
+      titleHover: "group-hover:text-amber-100",
+      checkIcon: "text-amber-500",
+      borderHover: "hover:border-amber-500/30",
+    },
+    emerald: {
+      blobConfig: "bg-emerald-500/10 -right-20 -top-20 group-hover:bg-emerald-500/20",
+      iconBg: "bg-white/5 border-white/10",
+      iconColor: "text-emerald-400",
+      period: "bg-white/5 border-white/10 text-white/60",
+      titleHover: "group-hover:text-emerald-100",
+      checkIcon: "text-emerald-500",
+      borderHover: "hover:border-emerald-500/30",
+    },
+    rose: {
+      blobConfig: "bg-rose-500/10 -left-20 -bottom-20 group-hover:bg-rose-500/20",
+      iconBg: "bg-white/5 border-white/10",
+      iconColor: "text-rose-400",
+      period: "bg-white/5 border-white/10 text-white/60",
+      titleHover: "group-hover:text-rose-100",
+      checkIcon: "text-rose-500",
+      borderHover: "hover:border-rose-500/30",
+    },
+    indigo: {
+      blobConfig: "bg-indigo-500/10 -right-20 -top-20 group-hover:bg-indigo-500/20",
+      iconBg: "bg-white/5 border-white/10",
+      iconColor: "text-indigo-400",
+      period: "bg-white/5 border-white/10 text-white/60",
+      titleHover: "group-hover:text-indigo-100",
+      checkIcon: "text-indigo-500",
+      borderHover: "hover:border-indigo-500/30",
     },
   };
 

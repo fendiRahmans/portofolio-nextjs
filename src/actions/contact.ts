@@ -84,3 +84,43 @@ export async function getContactCountThisWeek() {
     return 0;
   }
 }
+
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+export async function createContact(formData: FormData) {
+  try {
+    const rawData = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    const validatedData = contactSchema.safeParse(rawData);
+
+    if (!validatedData.success) {
+      return {
+        success: false,
+        error: validatedData.error.flatten().fieldErrors,
+      };
+    }
+
+    await db.insert(contact).values({
+      name: validatedData.data.name,
+      email: validatedData.data.email,
+      message: validatedData.data.message,
+      status: "new",
+    });
+
+    revalidatePath("/admin/contact");
+    return { success: true, message: "Message sent successfully!" };
+  } catch (error) {
+    console.error("Error creating contact:", error);
+    return { success: false, error: "Failed to send message" };
+  }
+}

@@ -109,6 +109,22 @@ export async function getAvailableForHire() {
   }
 }
 
+export async function getSetting(name: string) {
+  try {
+    const result = await db
+      .select()
+      .from(setting)
+      .where(eq(setting.name, name))
+      .limit(1);
+
+    if (result.length === 0) return null;
+    return result[0].value;
+  } catch (error) {
+    console.error(`Error fetching setting ${name}:`, error);
+    return null;
+  }
+}
+
 export async function toggleAvailableForHire(isAvailable: boolean) {
   try {
     const existing = await db

@@ -2,8 +2,54 @@ import Link from "next/link";
 import Background from "../components/Background";
 import Dock from "../components/Dock";
 import TimelineItem from "../components/timeline/TimelineItem";
+import { getCareers } from "@/actions/career";
+import { getSetting } from "@/actions/settings";
 
-export default function CareerTimeline() {
+export default async function CareerTimeline() {
+  const { success, data } = await getCareers();
+  const careers = success && data ? data : [];
+
+  // Logic to determine dynamic header text (Same as Experience component)
+  let minYear = new Date().getFullYear();
+  let maxYear = new Date().getFullYear();
+  let hasData = false;
+
+  if (careers.length > 0) {
+    const years = careers.flatMap(c => {
+      const matches = c.year.match(/\d{4}/g);
+      return matches ? matches.map(Number) : [];
+    });
+
+    if (years.length > 0) {
+      minYear = Math.min(...years);
+      maxYear = Math.max(...years);
+      hasData = true;
+    }
+
+    const hasPresent = careers.some(c =>
+      c.year.toLowerCase().includes('present') ||
+      c.year.toLowerCase().includes('now')
+    );
+
+    if (hasPresent) {
+      maxYear = new Date().getFullYear();
+    }
+  }
+
+  const defaultSubtitle = hasData
+    ? `A journey through code and innovation (${minYear}-${maxYear})`
+    : "A journey through code and innovation (2019-2025)";
+
+  // We can reuse the same settings or use new ones if specific to this page. 
+  // For consistency with the specific request, I'll check if there are specific career page settings, 
+  // but falling back to the calculated period is a safe bet.
+  // The user didn't explicitly ask for separate settings for this page's header text, 
+  // but the "Experience" component uses 'experience_subtitle/period'.
+  // I will use a generic 'career_subtitle' if they want to override this specific page's text, 
+  // or just default to the calculated string.
+
+  const headerSubtitle = (await getSetting("career_subtitle")) || defaultSubtitle;
+
   return (
     <div className="bg-background-dark text-white font-display overflow-x-hidden min-h-screen relative selection:bg-primary/30">
       <Background />
@@ -34,7 +80,7 @@ export default function CareerTimeline() {
                 Career Timeline
               </h2>
               <p className="text-white/40">
-                A journey through code and innovation (2019-2025)
+                {headerSubtitle}
               </p>
             </div>
             <div className="hidden md:block h-px flex-1 bg-gradient-to-r from-white/10 to-transparent mx-8 mb-2"></div>
@@ -48,106 +94,21 @@ export default function CareerTimeline() {
           <div className="relative pl-8 md:pl-12 border-l border-white/5 space-y-12 pb-8">
             <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-primary via-purple-500 to-transparent shadow-[0_0_15px_rgba(25,93,230,0.6)]"></div>
 
-            <TimelineItem
-              year="2025 — Present"
-              title="Izidok & Hitalent"
-              subtitle="Lead Fullstack & Mobile Architect"
-              description="Spearheading the fullstack architecture for the Izidok telemedicine platform and developing the native Hitalent Android ecosystem."
-              icon="devices"
-              color="primary"
-              projectList={[
-                { name: "Izidok:", type: "Fullstack Laravel Development" },
-                { name: "Hitalent:", type: "Android Flutter App" },
-              ]}
-              techStack={["Laravel", "Vue.js", "Flutter", "Dart"]}
-            />
-
-            <TimelineItem
-              year="2024"
-              title="Frontend Ecosystem"
-              subtitle="Hitalent, Gaidz & Otca Meyer"
-              description="Delivered high-performance frontend applications using Next.js and Nuxt.js. Focused on scalable admin panels, dashboards, and user-facing platforms."
-              icon="code_blocks"
-              color="cyan"
-              keyProjects={[
-                "Hitalent V3 (Next.js)",
-                "Gaidz (Next.js)",
-                "Otca Meyer (Nuxt.js)",
-                "Superadmin & Personalia",
-              ]}
-              techStack={["Next.js", "Nuxt.js", "React", "Tailwind"]}
-            />
-
-            <TimelineItem
-              year="2023"
-              title="Enterprise Systems"
-              subtitle="OutSystems & Banking Solutions"
-              description="Developed critical banking modules and enterprise applications. Specialized in low-code OutSystems solutions and secure React integrations."
-              icon="apartment"
-              color="purple"
-              keyProjects={[
-                "NNA",
-                "DDMA",
-                "Sectara",
-                "GTQ",
-                "BAT Mobile",
-                "BSI Risk (React)",
-                "Eduline (Nuxt)",
-              ]}
-              techStack={["OutSystems", "React.js", "Nuxt.js", "SQL Server"]}
-            />
-
-            <TimelineItem
-              year="2022"
-              title="Fullstack Solutions"
-              subtitle="Diverse Client Projects"
-              description="Built custom POS systems, non-profit platforms, and educational tools."
-              icon="web"
-              color="amber"
-              bulletPoints={[
-                "Cashier Danarhadi",
-                "STC Save the Children Platform",
-                "Siswa Bekawan Education Tool",
-              ]}
-              techStack={["Web Development", "POS Systems"]}
-            />
-
-            <TimelineItem
-              year="2021"
-              title="System Migrations"
-              subtitle="Web Development & Themes"
-              description="Executed system migrations and developed employee management systems."
-              icon="sync_alt"
-              color="emerald"
-              keyProjects={[
-                "Migrasi Sipedet",
-                "Daftar Karyawan",
-                "Tema Jejak Hati",
-                "Navila",
-                "Pisuka",
-              ]}
-              techStack={["System Migration", "PHP"]}
-            />
-
-            <TimelineItem
-              year="2020"
-              title="App Support"
-              subtitle="Fintech & Services"
-              description="Provided technical support and development for Cashme Indosat integration and online dating platforms."
-              icon="support_agent"
-              color="rose"
-              keyProjects={["Cashme Indosat", "Dating Online Support"]}
-            />
-
-            <TimelineItem
-              year="2019"
-              title="The Beginning"
-              subtitle="Junior Fullstack Developer"
-              description="Developed the **Tiketing Bus Tami Jaya** system, streamlining transport booking operations." // Bold not supported natively in description string unless parsed, but sticking to prop contract
-              icon="directions_bus"
-              color="indigo"
-              techStack={["PHP", "CodeIgniter", "MySQL"]}
-            />
+            {careers.map((career) => (
+              <TimelineItem
+                key={career.id}
+                year={career.year}
+                title={career.title}
+                subtitle={career.subtitle}
+                description={career.description}
+                icon={career.icon}
+                color={career.color as any}
+                projectList={career.projectList || undefined}
+                keyProjects={career.keyProjects || undefined}
+                techStack={career.techStack || undefined}
+                bulletPoints={career.bulletPoints || undefined}
+              />
+            ))}
           </div>
         </section>
       </main>
