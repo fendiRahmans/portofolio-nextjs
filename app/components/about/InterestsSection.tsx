@@ -1,14 +1,11 @@
 import React from "react";
 
-export default function InterestsSection() {
-  const interests = [
-    "Generative AI",
-    "System Architecture",
-    "UI Motion Design",
-    "Edge Computing",
-    "Human-Computer Interaction",
-    "Analog Photography",
-  ];
+interface InterestsSectionProps {
+  interests: string[];
+}
+
+export default function InterestsSection({ interests }: InterestsSectionProps) {
+  if (!interests || interests.length === 0) return null;
 
   return (
     <div className="mt-20">

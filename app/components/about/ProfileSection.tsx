@@ -1,13 +1,26 @@
 import React from "react";
+import Image from "next/image";
 
-export default function ProfileSection() {
+interface ProfileSectionProps {
+  name: string;
+  title: string;
+  location: string;
+  imageUrl: string;
+}
+
+export default function ProfileSection({
+  name,
+  title,
+  location,
+  imageUrl,
+}: ProfileSectionProps) {
   return (
     <section className="w-full md:w-[40%] h-screen sticky top-0 flex flex-col items-center justify-center p-8 lg:p-16">
       <div className="w-full max-w-md">
         {/* Signature Branding */}
         <div className="mb-12">
           <h1 className="text-5xl text-primary mb-2 font-bold font-display">
-            Alex Sterling
+            {name}
           </h1>
           <div className="h-px w-24 bg-gradient-to-r from-primary to-transparent"></div>
         </div>
@@ -18,22 +31,21 @@ export default function ProfileSection() {
             <div
               className="w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage:
-                  'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9WgTlBdSmiEh4MyIcn6mM2PQJTaI8nX6agLr9HRR39kCZ2QwPjllwPwtqA62QAMuImdyKwfwPYYcUjV1M05yasT4EUhGeyDfN3lyX0wwokz-pbfxgioTLYRHaKGrYSWJRriXMB8fxuStJTN9MHMeYMU8JpRuqaPXNIopoP_OYoqVg9Cpt3Sm1FStZf8Bz7ID6QM0JnOUv_9K1MpW-IskY7dDNLiy0JGz1Zc1Kn9fELnoUtiNUC9RVT-UIRjUj1Mej2iz47lAlcKSO")',
+                backgroundImage: `url("${imageUrl}")`,
               }}
-              title="Professional portrait of a male developer in a dark studio setting"
+              title={`Professional portrait of ${name}`}
             ></div>
           </div>
         </div>
         <div className="mt-8 space-y-2">
           <p className="font-display text-2xl font-bold tracking-tight text-white">
-            Senior Fullstack Developer
+            {title}
           </p>
           <p className="text-slate-400 font-light flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-sm">
               location_on
             </span>
-            Based in San Francisco, CA
+            {location}
           </p>
         </div>
       </div>

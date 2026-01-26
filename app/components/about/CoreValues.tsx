@@ -1,28 +1,17 @@
 import React from "react";
 
-export default function CoreValues() {
-  const values = [
-    {
-      icon: "diamond",
-      title: "Code Quality",
-      description: "Clean, maintainable, and scalable architecture isn't a luxury—it's the foundation.",
-    },
-    {
-      icon: "ads_click",
-      title: "User Centricity",
-      description: "I build products that people love to use, prioritizing accessibility and performance.",
-    },
-    {
-      icon: "bolt",
-      title: "Extreme Agility",
-      description: "Rapid prototyping and iterative delivery to stay ahead in competitive markets.",
-    },
-    {
-      icon: "neurology",
-      title: "AI Mastery",
-      description: "Leveraging LLMs and neural networks to enhance software capabilities.",
-    },
-  ];
+interface CoreValue {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface CoreValuesProps {
+  values: CoreValue[];
+}
+
+export default function CoreValues({ values }: CoreValuesProps) {
+  if (!values || values.length === 0) return null;
 
   return (
     <div className="mt-20">

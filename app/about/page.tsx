@@ -5,8 +5,26 @@ import ProfileSection from "../components/about/ProfileSection";
 import NarrativeSection from "../components/about/NarrativeSection";
 import CoreValues from "../components/about/CoreValues";
 import InterestsSection from "../components/about/InterestsSection";
+import { getAbout } from "@/actions/about";
 
-export default function About() {
+export default async function About() {
+  const { data } = await getAbout();
+
+  const profile = {
+    name: data?.name || "Name",
+    title: data?.title || "Title",
+    location: data?.location || "Location",
+    imageUrl: data?.imageUrl || "",
+  };
+
+  const narrative = {
+    title: data?.narrativeTitle || "About Me",
+    content: data?.narrativeContent || "Content coming soon...",
+  };
+
+  const coreValues = data?.coreValues || [];
+  const interests = data?.interests || [];
+
   return (
     <div className="bg-background-dark text-white font-display overflow-x-hidden min-h-screen relative selection:bg-primary/30">
       <Background />
@@ -28,13 +46,21 @@ export default function About() {
 
       <main className="relative min-h-screen flex flex-col md:flex-row overflow-hidden z-20">
         {/* Left Side: Profile (Fixed on Desktop) */}
-        <ProfileSection />
+        <ProfileSection
+          name={profile.name}
+          title={profile.title}
+          location={profile.location}
+          imageUrl={profile.imageUrl}
+        />
 
         {/* Right Side: Narrative (Scrollable) */}
         <section className="w-full md:w-[60%] h-screen overflow-y-auto no-scrollbar p-8 lg:p-16 xl:p-24 pb-32">
-          <NarrativeSection />
-          <CoreValues />
-          <InterestsSection />
+          <NarrativeSection
+            title={narrative.title}
+            content={narrative.content}
+          />
+          <CoreValues values={coreValues} />
+          <InterestsSection interests={interests} />
 
           {/* Footer Spacer for Dock */}
           <div className="h-32"></div>
