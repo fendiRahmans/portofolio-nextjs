@@ -58,30 +58,48 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
 
       if (editingItem) {
         // Update existing
+        console.log("Updating setting:", { id: editingItem.id, name: data.name, value: data.value });
         const result = await updateSetting(editingItem.id, {}, formData);
+        console.log("Update result:", result);
+
         if (result.success) {
+          // Close dialog first
+          setIsFormOpen(false);
+          setEditingItem(undefined);
+
+          // Wait a bit to ensure database is updated
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          // Refresh to get latest data from server
           router.refresh();
-          setSettings((prev) =>
-            prev.map((item) =>
-              item.id === editingItem.id ? { ...item, ...data } : item
-            )
-          );
         } else {
-          console.error(result.error);
+          console.error("Update failed:", result.error);
+          alert(`Failed to update setting: ${result.error || "Unknown error"}`);
         }
       } else {
         // Add new
+        console.log("Creating setting:", { name: data.name, value: data.value });
         const result = await createSetting({}, formData);
+        console.log("Create result:", result);
+
         if (result.success) {
+          // Close dialog first
+          setIsFormOpen(false);
+          setEditingItem(undefined);
+
+          // Wait a bit to ensure database is updated
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          // Refresh to get latest data from server
           router.refresh();
         } else {
-          console.error(result.error);
+          console.error("Create failed:", result.error);
+          alert(`Failed to create setting: ${result.error || "Unknown error"}`);
         }
       }
-      setIsFormOpen(false);
-      setEditingItem(undefined);
     } catch (error) {
       console.error("Failed to save setting", error);
+      alert(`An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setIsLoading(false);
     }

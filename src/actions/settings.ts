@@ -17,7 +17,9 @@ export type SettingState = {
 
 export async function getSettings() {
   try {
+    console.log("getSettings - Fetching settings from database...");
     const data = await db.select().from(setting).orderBy(desc(setting.createdAt));
+    console.log("getSettings - Fetched data:", data);
     return { success: true, data };
   } catch (error) {
     console.error("Error fetching settings:", error);
@@ -60,9 +62,12 @@ export async function updateSetting(
     value: formData.get("value") as string,
   };
 
+  console.log("updateSetting called with:", { id, data });
+
   const validatedFields = settingSchema.safeParse(data);
 
   if (!validatedFields.success) {
+    console.error("Validation failed:", validatedFields.error.flatten().fieldErrors);
     return {
       error: "Validation failed. Please check your inputs.",
       fieldErrors: validatedFields.error.flatten().fieldErrors,
@@ -70,11 +75,23 @@ export async function updateSetting(
   }
 
   try {
-    await db
+    // Update with explicit updatedAt
+    const result = await db
       .update(setting)
-      .set(validatedFields.data)
+      .set({
+        ...validatedFields.data,
+        updatedAt: new Date(),
+      })
       .where(eq(setting.id, id));
+
+    console.log("Database update result:", result);
+
+    // Revalidate both settings page and dashboard
     revalidatePath("/admin/settings");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/");
+
+    console.log("Update successful for setting id:", id);
     return { success: true };
   } catch (error) {
     console.error("Error updating setting:", error);
