@@ -1,4 +1,6 @@
 import { getAvailableForHire } from "@/actions/settings";
+import Link from "next/link";
+
 
 export default async function Hero() {
   const isAvailable = await getAvailableForHire();
@@ -19,9 +21,12 @@ export default async function Hero() {
         modern architecture with premium, motion-rich interfaces.
       </p>
       <div className="flex gap-4">
-        <button className="h-12 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-medium transition-all shadow-[0_0_20px_rgba(25,93,230,0.3)] hover:shadow-[0_0_30px_rgba(25,93,230,0.5)] flex items-center gap-2">
-          <span>View Projects</span>
-        </button>
+        <Link
+          href="/career"
+          className="h-12 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-medium transition-all shadow-[0_0_20px_rgba(25,93,230,0.3)] hover:shadow-[0_0_30px_rgba(25,93,230,0.5)] flex items-center gap-2"
+        >
+          <span>View Career</span>
+        </Link>
         <button className="h-12 px-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all backdrop-blur-sm flex items-center gap-2">
           <span className="material-symbols-outlined text-[20px]">download</span>
           <span>CV</span>

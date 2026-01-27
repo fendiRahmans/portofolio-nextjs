@@ -24,7 +24,7 @@ export default function Dock({ items }: DockProps) {
     { icon: "person", label: "About", href: "/about" },
     { icon: "grid_view", label: "Career Path", href: "/career" },
     { icon: "mail", label: "Contact", href: "/contact" },
-    { icon: "calendar_month", label: "Book", href: "/#book", variant: "primary" },
+    // { icon: "calendar_month", label: "Book", href: "/#book", variant: "primary" },
   ];
 
   const displayItems = items || defaultItems;
