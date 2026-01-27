@@ -70,8 +70,8 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           // Wait a bit to ensure database is updated
           await new Promise(resolve => setTimeout(resolve, 100));
 
-          // Refresh to get latest data from server
-          router.refresh();
+          // Force a hard reload to ensure fresh data
+          window.location.reload();
         } else {
           console.error("Update failed:", result.error);
           alert(`Failed to update setting: ${result.error || "Unknown error"}`);
@@ -90,8 +90,8 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           // Wait a bit to ensure database is updated
           await new Promise(resolve => setTimeout(resolve, 100));
 
-          // Refresh to get latest data from server
-          router.refresh();
+          // Force a hard reload to ensure fresh data
+          window.location.reload();
         } else {
           console.error("Create failed:", result.error);
           alert(`Failed to create setting: ${result.error || "Unknown error"}`);

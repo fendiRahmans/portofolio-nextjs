@@ -2,6 +2,10 @@ import { getSettings } from "@/actions/settings";
 import SettingsClient from "./SettingsClient";
 import { SettingItem } from "../../components/admin/SettingFormDialog";
 
+// Force dynamic rendering to prevent caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminSettingsPage() {
   const result = await getSettings();
 

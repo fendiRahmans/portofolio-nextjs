@@ -5,6 +5,7 @@ import { setting } from "@/db/schema";
 import { settingSchema } from "@/lib/validations";
 import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { unstable_noStore as noStore } from "next/cache";
 
 export type SettingState = {
   error?: string;
@@ -16,6 +17,8 @@ export type SettingState = {
 };
 
 export async function getSettings() {
+  noStore(); // Disable caching for this function
+
   try {
     console.log("getSettings - Fetching settings from database...");
     const data = await db.select().from(setting).orderBy(desc(setting.createdAt));
@@ -111,15 +114,26 @@ export async function deleteSetting(id: number) {
 }
 
 export async function getAvailableForHire() {
+  noStore(); // Disable caching for this function
+
   try {
+    console.log("getAvailableForHire - Fetching from database...");
     const result = await db
       .select()
       .from(setting)
       .where(eq(setting.name, "available_for_hire"))
       .limit(1);
 
-    if (result.length === 0) return false;
-    return result[0].value === "true";
+    console.log("getAvailableForHire - Result:", result);
+
+    if (result.length === 0) {
+      console.log("getAvailableForHire - No setting found, returning false");
+      return false;
+    }
+
+    const isAvailable = result[0].value === "true";
+    console.log("getAvailableForHire - Returning:", isAvailable);
+    return isAvailable;
   } catch (error) {
     console.error("Error fetching available_for_hire setting:", error);
     return false;
@@ -127,6 +141,8 @@ export async function getAvailableForHire() {
 }
 
 export async function getSetting(name: string) {
+  noStore(); // Disable caching for this function
+
   try {
     const result = await db
       .select()
