@@ -1,14 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LogoutButton from "./LogoutButton";
+import { getCurrentUser } from "@/actions/auth";
 
 interface AdminHeaderProps {
   title: string;
   subtitle?: string;
 }
 
+type User = {
+  id: number;
+  name: string;
+  email: string;
+} | null;
+
 export default function AdminHeader({ title, subtitle }: AdminHeaderProps) {
+  const [user, setUser] = useState<User>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getCurrentUser();
+      setUser(userData);
+    };
+    fetchUser();
+  }, []);
+
   return (
     <header className="glass-panel border-b border-white/10 px-8 py-6 flex items-center justify-between">
       <div>
@@ -19,8 +36,12 @@ export default function AdminHeader({ title, subtitle }: AdminHeaderProps) {
       {/* Admin Profile */}
       <div className="flex items-center gap-4">
         <div className="text-right hidden sm:block">
-          <p className="text-white text-sm font-medium">Admin User</p>
-          <p className="text-white/40 text-xs">admin@portfolio.com</p>
+          <p className="text-white text-sm font-medium">
+            {user?.name || "Admin User"}
+          </p>
+          <p className="text-white/40 text-xs">
+            {user?.email || "admin@portfolio.com"}
+          </p>
         </div>
         <div className="size-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
           <span className="material-symbols-outlined text-primary text-[20px]">

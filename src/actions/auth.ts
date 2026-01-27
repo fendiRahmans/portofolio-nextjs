@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { createSession, verifyPassword, deleteSession } from "@/lib/auth";
+import { createSession, verifyPassword, deleteSession, verifySession } from "@/lib/auth";
 import { loginSchema } from "@/lib/validations";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -57,4 +57,28 @@ export async function login(prevState: LoginState, formData: FormData) {
 export async function logout() {
   await deleteSession();
   redirect("/admin/login");
+}
+
+export async function getCurrentUser() {
+  try {
+    const session = await verifySession();
+
+    if (!session || !session.userId) {
+      return null;
+    }
+
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      })
+      .from(users)
+      .where(eq(users.id, session.userId as number));
+
+    return user || null;
+  } catch (error) {
+    console.error("Get current user error:", error);
+    return null;
+  }
 }
