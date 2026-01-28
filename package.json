@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "seed": "tsx src/db/seed.ts",
+    "migrate": "npm run db:generate && npm run db:push && npm run seed"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -31,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.2",
     "tailwindcss": "^4",
+    "tsx": "^4.7.0",
     "typescript": "^5"
   }
 }

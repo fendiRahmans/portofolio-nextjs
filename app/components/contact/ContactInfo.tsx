@@ -1,6 +1,52 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { getSettings } from "@/actions/settings";
+
+interface ContactData {
+  email: string;
+  linkedIn: string;
+  github: string;
+}
 
 export default function ContactInfo() {
+  const [contactData, setContactData] = useState<ContactData>({
+    email: "hello@alexsterling.dev",
+    linkedIn: "linkedin.com/in/alexsterling",
+    github: "github.com/alexsterling",
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactData = async () => {
+      try {
+        const result = await getSettings();
+        if (result.success && result.data) {
+          const settings = result.data as { name: string; value: string }[];
+          const newData: ContactData = { ...contactData };
+
+          settings.forEach((setting) => {
+            if (setting.name === "contact_email") {
+              newData.email = setting.value;
+            } else if (setting.name === "contact_linkedin") {
+              newData.linkedIn = setting.value;
+            } else if (setting.name === "contact_github") {
+              newData.github = setting.value;
+            }
+          });
+
+          setContactData(newData);
+        }
+      } catch (error) {
+        console.error("Error fetching contact data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactData();
+  }, []);
+
   return (
     <section className="w-full md:w-5/12">
       <div className="glass-heavy p-8 lg:p-14 rounded-3xl h-full flex flex-col relative overflow-hidden">
@@ -24,7 +70,7 @@ export default function ContactInfo() {
           <div className="space-y-4">
             <a
               className="glass-card p-5 rounded-2xl flex items-center gap-5"
-              href="mailto:hello@alexsterling.dev"
+              href={`mailto:${contactData.email}`}
             >
               <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center">
                 <span className="material-symbols-outlined text-primary text-2xl">
@@ -36,13 +82,15 @@ export default function ContactInfo() {
                   Direct Email
                 </p>
                 <p className="text-slate-200 font-medium">
-                  hello@alexsterling.dev
+                  {contactData.email}
                 </p>
               </div>
             </a>
             <a
               className="glass-card p-5 rounded-2xl flex items-center gap-5"
-              href="#"
+              href={`https://${contactData.linkedIn}`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center">
                 <span className="material-symbols-outlined text-blue-400 text-2xl">
@@ -54,13 +102,15 @@ export default function ContactInfo() {
                   LinkedIn
                 </p>
                 <p className="text-slate-200 font-medium">
-                  linkedin.com/in/alexsterling
+                  {contactData.linkedIn}
                 </p>
               </div>
             </a>
             <a
               className="glass-card p-5 rounded-2xl flex items-center gap-5"
-              href="#"
+              href={`https://${contactData.github}`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <div className="w-12 h-12 rounded-xl bg-slate-100/10 flex items-center justify-center">
                 <span className="material-symbols-outlined text-slate-300 text-2xl">
@@ -72,7 +122,7 @@ export default function ContactInfo() {
                   GitHub
                 </p>
                 <p className="text-slate-200 font-medium">
-                  github.com/alexsterling
+                  {contactData.github}
                 </p>
               </div>
             </a>
