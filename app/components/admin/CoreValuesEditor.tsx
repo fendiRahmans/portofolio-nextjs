@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Dialog } from "../ui/Dialog";
@@ -19,6 +19,75 @@ interface CoreValuesEditorProps {
   onChange: (newValue: CoreValue[]) => void;
 }
 
+// Separate form component to prevent unnecessary re-renders
+const CoreValueForm = React.memo(({
+  formData,
+  onInputChange,
+  onSubmit,
+  onCancel,
+}: {
+  formData: CoreValue;
+  onInputChange: (field: keyof CoreValue, value: string) => void;
+  onSubmit: () => void;
+  onCancel: () => void;
+}) => (
+  <div className="space-y-4">
+    <div className="space-y-2">
+      <Label>Icon (Google Material Symbol)</Label>
+      <Input
+        placeholder="e.g. bolt"
+        value={formData.icon}
+        onChange={(e) => onInputChange("icon", e.target.value)}
+        required
+      />
+    </div>
+    <div className="space-y-2">
+      <Label>Title</Label>
+      <Input
+        placeholder="e.g. Fast Performance"
+        value={formData.title}
+        onChange={(e) => onInputChange("title", e.target.value)}
+        required
+      />
+    </div>
+    <div className="space-y-2">
+      <Label>Description</Label>
+      <TextArea
+        placeholder="Brief description..."
+        value={formData.description}
+        onChange={(e) => onInputChange("description", e.target.value)}
+        required
+        className="min-h-[100px]"
+      />
+    </div>
+    <div className="flex justify-end gap-2 pt-4">
+      <Button
+        type="button"
+        variant="glass"
+        onClick={onCancel}
+        className="!w-auto"
+      >
+        Cancel
+      </Button>
+      <Button 
+        type="button" 
+        onClick={onSubmit} 
+        className="!w-auto"
+      >
+        Save
+      </Button>
+    </div>
+  </div>
+), (prevProps, nextProps) => {
+  // Custom comparison - re-render only if formData really changed
+  return (
+    prevProps.formData === nextProps.formData &&
+    prevProps.onInputChange === nextProps.onInputChange &&
+    prevProps.onSubmit === nextProps.onSubmit &&
+    prevProps.onCancel === nextProps.onCancel
+  );
+});
+
 export default function CoreValuesEditor({
   value = [],
   onChange,
@@ -33,24 +102,32 @@ export default function CoreValuesEditor({
   });
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-  const handleAdd = () => {
+  const handleCloseDialog = useCallback(() => {
+    setIsDialogOpen(false);
+  }, []);
+
+  const handleInputChange = useCallback((field: keyof CoreValue, newValue: string) => {
+    setFormData((prev) => ({ ...prev, [field]: newValue }));
+  }, []);
+
+  const handleAdd = useCallback(() => {
     setEditingIndex(null);
     setFormData({ icon: "", title: "", description: "" });
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const handleEdit = (index: number) => {
+  const handleEdit = useCallback((index: number) => {
     setEditingIndex(index);
     setFormData(value[index]);
     setIsDialogOpen(true);
-  };
+  }, [value]);
 
-  const handleDeleteClick = (index: number) => {
+  const handleDeleteClick = useCallback((index: number) => {
     setDeletingIndex(index);
     setIsDeleteOpen(true);
-  };
+  }, []);
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = useCallback(() => {
     if (deletingIndex !== null) {
       const newValue = [...value];
       newValue.splice(deletingIndex, 1);
@@ -58,9 +135,9 @@ export default function CoreValuesEditor({
       setDeletingIndex(null);
       setIsDeleteOpen(false);
     }
-  };
+  }, [deletingIndex, value, onChange]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     // Validate required fields
     if (!formData.icon.trim() || !formData.title.trim() || !formData.description.trim()) {
       return;
@@ -76,7 +153,7 @@ export default function CoreValuesEditor({
       onChange([...value, formData]);
     }
     setIsDialogOpen(false);
-  };
+  }, [formData, editingIndex, value, onChange]);
 
   return (
     <div className="space-y-4">
@@ -137,58 +214,15 @@ export default function CoreValuesEditor({
 
       <Dialog
         isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        onClose={handleCloseDialog}
         title={editingIndex !== null ? "Edit Core Value" : "Add Core Value"}
       >
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Icon (Google Material Symbol)</Label>
-            <Input
-              placeholder="e.g. bolt"
-              value={formData.icon}
-              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Title</Label>
-            <Input
-              placeholder="e.g. Fast Performance"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Description</Label>
-            <TextArea
-              placeholder="Brief description..."
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              required
-              className="min-h-[100px]"
-            />
-          </div>
-          <div className="flex justify-end gap-2 pt-4">
-            <Button
-              type="button"
-              variant="glass"
-              onClick={() => setIsDialogOpen(false)}
-              className="!w-auto"
-            >
-              Cancel
-            </Button>
-            <Button 
-              type="button" 
-              onClick={handleSubmit} 
-              className="!w-auto"
-            >
-              Save
-            </Button>
-          </div>
-        </div>
+        <CoreValueForm
+          formData={formData}
+          onInputChange={handleInputChange}
+          onSubmit={handleSubmit}
+          onCancel={handleCloseDialog}
+        />
       </Dialog>
 
       <DeleteConfirmDialog

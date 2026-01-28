@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 
 interface DialogProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface DialogProps {
   size?: "sm" | "md" | "lg";
 }
 
-export const Dialog = ({
+export const Dialog = React.memo(({
   isOpen,
   onClose,
   title,
@@ -39,25 +39,32 @@ export const Dialog = ({
     };
   }, [isOpen, handleEscape]);
 
-  if (!isOpen) return null;
-
-  const sizeClasses = {
+  const sizeClasses = useMemo(() => ({
     sm: "max-w-sm",
     md: "max-w-md",
     lg: "max-w-lg",
-  };
+  }), []);
+
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/60 pointer-events-auto"
         onClick={onClose}
+        style={{
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+        }}
       />
 
       {/* Dialog Content */}
       <div
-        className={`relative w-full ${sizeClasses[size]} mx-4 max-h-[90vh] flex flex-col glass-panel rounded-2xl border border-white/10 shadow-2xl animate-scale-in`}
+        className={`relative w-full ${sizeClasses[size]} mx-4 max-h-[90vh] flex flex-col glass-panel rounded-2xl border border-white/10 shadow-2xl pointer-events-auto`}
+        style={{
+          animation: "scaleIn 0.2s ease-out",
+        }}
       >
         {/* Header */}
         {title && (
@@ -77,6 +84,19 @@ export const Dialog = ({
         {/* Body */}
         <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">{children}</div>
       </div>
+
+      <style jsx>{`
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
-};
+});
