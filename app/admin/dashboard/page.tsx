@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminHeader from "../../components/admin/AdminHeader";
 import StatCard from "../../components/admin/StatCard";
@@ -21,6 +22,7 @@ type Contact = {
 };
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [isAvailable, setIsAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -177,7 +179,7 @@ export default function AdminDashboard() {
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            <button className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all duration-300 text-left">
+            <button onClick={() => router.push("/admin/career")} className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-primary/10 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 text-left border border-transparent hover:border-primary/50 cursor-pointer">
               <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-primary text-[20px]">
                   add
@@ -189,7 +191,7 @@ export default function AdminDashboard() {
               </div>
             </button>
 
-            <button className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all duration-300 text-left">
+            <button onClick={() => router.push("/admin/about")} className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-green-500/10 hover:scale-105 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 text-left border border-transparent hover:border-green-500/50 cursor-pointer">
               <div className="size-10 rounded-lg bg-green-500/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-green-400 text-[20px]">
                   edit
@@ -201,7 +203,7 @@ export default function AdminDashboard() {
               </div>
             </button>
 
-            <button className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all duration-300 text-left">
+            <button onClick={() => router.push("/")} className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-purple-500/10 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 text-left border border-transparent hover:border-purple-500/50 cursor-pointer">
               <div className="size-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-purple-400 text-[20px]">
                   visibility

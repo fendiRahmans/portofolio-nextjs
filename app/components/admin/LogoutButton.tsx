@@ -23,7 +23,7 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-red-400 transition-colors"
+      className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-red-400 transition-colors flex items-center justify-center"
       title="Logout"
     >
       <span className="material-symbols-outlined text-[20px]">logout</span>

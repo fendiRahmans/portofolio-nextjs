@@ -1,4 +1,5 @@
 import Image from "next/image";
+import DashboardButton from "./DashboardButton";
 
 export default function Navbar() {
   return (
@@ -15,6 +16,7 @@ export default function Navbar() {
         <span className="font-bold tracking-tight text-lg">DevPortfolio</span>
       </div>
       <div className="hidden md:flex items-center gap-4">
+        <DashboardButton />
         <a
           className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors"
           href="#"
