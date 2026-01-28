@@ -19,7 +19,46 @@ export async function getAbout() {
     const data = await db.select().from(about).limit(1);
     // If no data, return null or a default empty structure
     if (!data.length) return { success: true, data: null };
-    return { success: true, data: data[0] };
+    
+    const aboutData = data[0];
+    
+    // Parse JSON fields if they're strings (from database)
+    let coreValues: any[] = [];
+    let interests: string[] = [];
+    
+    try {
+      if (aboutData.coreValues) {
+        coreValues = typeof aboutData.coreValues === 'string' 
+          ? JSON.parse(aboutData.coreValues) 
+          : Array.isArray(aboutData.coreValues) 
+          ? aboutData.coreValues 
+          : [];
+      }
+    } catch (e) {
+      console.error("Error parsing coreValues:", e);
+      coreValues = [];
+    }
+    
+    try {
+      if (aboutData.interests) {
+        interests = typeof aboutData.interests === 'string' 
+          ? JSON.parse(aboutData.interests) 
+          : Array.isArray(aboutData.interests) 
+          ? aboutData.interests 
+          : [];
+      }
+    } catch (e) {
+      console.error("Error parsing interests:", e);
+      interests = [];
+    }
+    
+    const parsedData = {
+      ...aboutData,
+      coreValues,
+      interests,
+    };
+    
+    return { success: true, data: parsedData };
   } catch (error) {
     console.error("Error fetching about data:", error);
     return { success: false, error: "Failed to fetch about data" };
