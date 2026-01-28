@@ -1,3 +1,11 @@
 {
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "mcp.servers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-3acb5d5a-2f8d-4367-b49b-9990797a4788"
+      }
+    }
+  }
 }
