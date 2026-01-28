@@ -92,6 +92,8 @@ export default function CoreValuesEditor({
   value = [],
   onChange,
 }: CoreValuesEditorProps) {
+  // Ensure value is always an array
+  const safeValue = Array.isArray(value) ? value : [];
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -165,7 +167,7 @@ export default function CoreValuesEditor({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {value.map((item, index) => (
+        {safeValue.map((item, index) => (
           <div
             key={index}
             className="glass-panel p-4 rounded-xl relative group hover:bg-white/5 transition-all"
@@ -205,7 +207,7 @@ export default function CoreValuesEditor({
           </div>
         ))}
 
-        {value.length === 0 && (
+        {safeValue.length === 0 && (
           <div className="col-span-full py-8 text-center text-white/30 border border-dashed border-white/10 rounded-xl">
             No core values added yet
           </div>
@@ -230,7 +232,7 @@ export default function CoreValuesEditor({
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}
         title="Delete Core Value"
-        itemName={value[deletingIndex ?? 0]?.title}
+        itemName={safeValue[deletingIndex ?? 0]?.title}
       />
     </div>
   );

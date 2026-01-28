@@ -19,15 +19,23 @@ interface AboutClientProps {
 
 export default function AboutClient({ initialData }: AboutClientProps) {
   const router = useRouter();
+  
+  // Ensure default values for arrays
+  const safeInitialData = initialData ? {
+    ...initialData,
+    coreValues: Array.isArray(initialData.coreValues) ? initialData.coreValues : [],
+    interests: Array.isArray(initialData.interests) ? initialData.interests : [],
+  } : null;
+  
   const [formData, setFormData] = useState<AboutSchema>({
-    name: initialData?.name || "",
-    title: initialData?.title || "",
-    location: initialData?.location || "",
-    imageUrl: initialData?.imageUrl || "",
-    narrativeTitle: initialData?.narrativeTitle || "",
-    narrativeContent: initialData?.narrativeContent || "",
-    coreValues: initialData?.coreValues || [],
-    interests: initialData?.interests || [],
+    name: safeInitialData?.name || "",
+    title: safeInitialData?.title || "",
+    location: safeInitialData?.location || "",
+    imageUrl: safeInitialData?.imageUrl || "",
+    narrativeTitle: safeInitialData?.narrativeTitle || "",
+    narrativeContent: safeInitialData?.narrativeContent || "",
+    coreValues: safeInitialData?.coreValues || [],
+    interests: safeInitialData?.interests || [],
   });
 
   const [isLoading, setIsLoading] = useState(false);

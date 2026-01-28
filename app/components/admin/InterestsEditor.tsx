@@ -13,20 +13,22 @@ export default function InterestsEditor({
   value = [],
   onChange,
 }: InterestsEditorProps) {
+  // Ensure value is always an array
+  const safeValue = Array.isArray(value) ? value : [];
   const [newItem, setNewItem] = useState("");
 
   const handleAdd = (e?: React.FormEvent) => {
     e?.preventDefault();
     if (newItem.trim()) {
-      if (!value.includes(newItem.trim())) {
-        onChange([...value, newItem.trim()]);
+      if (!safeValue.includes(newItem.trim())) {
+        onChange([...safeValue, newItem.trim()]);
       }
       setNewItem("");
     }
   };
 
   const handleRemove = (itemToRemove: string) => {
-    onChange(value.filter((item) => item !== itemToRemove));
+    onChange(safeValue.filter((item) => item !== itemToRemove));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -54,7 +56,7 @@ export default function InterestsEditor({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {value.map((item, index) => (
+        {safeValue.map((item, index) => (
           <div
             key={index}
             className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/5 animate-scale-in"
@@ -71,7 +73,7 @@ export default function InterestsEditor({
             </button>
           </div>
         ))}
-        {value.length === 0 && (
+        {safeValue.length === 0 && (
           <div className="text-white/30 text-sm italic py-2">
             No interests added yet
           </div>
