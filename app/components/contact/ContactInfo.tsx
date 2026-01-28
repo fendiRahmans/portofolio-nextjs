@@ -11,9 +11,9 @@ interface ContactData {
 
 export default function ContactInfo() {
   const [contactData, setContactData] = useState<ContactData>({
-    email: "hello@alexsterling.dev",
-    linkedIn: "linkedin.com/in/alexsterling",
-    github: "github.com/alexsterling",
+    email: "Loading...",
+    linkedIn: "Loading...",
+    github: "Loading...",
   });
   const [loading, setLoading] = useState(true);
 
