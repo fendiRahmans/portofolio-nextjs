@@ -86,8 +86,8 @@ export default function AboutClient({ initialData }: AboutClientProps) {
     <AdminLayout>
       <AdminHeader title="About Page" subtitle="Manage your profile information" />
 
-      <main className="flex-1 p-8">
-        <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
           {/* Success Message */}
           {successMessage && (
             <div className="bg-green-500/20 text-green-400 px-4 py-3 rounded-xl border border-green-500/30 animate-fade-in">
@@ -96,11 +96,11 @@ export default function AboutClient({ initialData }: AboutClientProps) {
           )}
 
           {/* Profile Section */}
-          <section className="glass-panel p-6 rounded-2xl space-y-6">
-            <h2 className="text-xl font-semibold text-white border-b border-white/10 pb-4">
+          <section className="glass-panel p-4 sm:p-6 rounded-2xl space-y-4 sm:space-y-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white border-b border-white/10 pb-4">
               Profile Information
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-2">
                 <Label icon="person">Name</Label>
                 <Input
@@ -149,11 +149,11 @@ export default function AboutClient({ initialData }: AboutClientProps) {
           </section>
 
           {/* Narrative Section */}
-          <section className="glass-panel p-6 rounded-2xl space-y-6">
-            <h2 className="text-xl font-semibold text-white border-b border-white/10 pb-4">
+          <section className="glass-panel p-4 sm:p-6 rounded-2xl space-y-4 sm:space-y-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white border-b border-white/10 pb-4">
               Narrative
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="space-y-2">
                 <Label icon="article">Narrative Title</Label>
                 <Input
@@ -183,7 +183,7 @@ export default function AboutClient({ initialData }: AboutClientProps) {
           </section>
 
           {/* Core Values Section */}
-          <section className="glass-panel p-6 rounded-2xl space-y-6">
+          <section className="glass-panel p-4 sm:p-6 rounded-2xl space-y-4 sm:space-y-6">
             <CoreValuesEditor
               value={formData.coreValues}
               onChange={(newValues) => handleChange("coreValues", newValues)}
@@ -191,7 +191,7 @@ export default function AboutClient({ initialData }: AboutClientProps) {
           </section>
 
           {/* Interests Section */}
-          <section className="glass-panel p-6 rounded-2xl space-y-6">
+          <section className="glass-panel p-4 sm:p-6 rounded-2xl space-y-4 sm:space-y-6">
             <InterestsEditor
               value={formData.interests}
               onChange={(newInterests) => handleChange("interests", newInterests)}

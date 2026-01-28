@@ -136,9 +136,9 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
         subtitle="Manage application settings"
       />
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Action Bar */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-6">
           <div className="flex items-center gap-2">
             <span className="text-white/50 text-sm">
               {settings.length} settings
@@ -154,26 +154,26 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           {settings.map((item) => (
             <div
               key={item.id}
-              className="glass-panel rounded-2xl p-5 flex items-center justify-between group hover:bg-white/5 transition-all duration-300"
+              className="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 group hover:bg-white/5 transition-all duration-300"
             >
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30">
+                  <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 flex-shrink-0">
                     <span className="material-symbols-outlined text-primary text-[20px]">
                       settings
                     </span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-white/50 text-xs uppercase tracking-wider mb-0.5">
                       {item.name}
                     </p>
-                    <p className="text-white font-medium">{item.value}</p>
+                    <p className="text-white font-medium truncate">{item.value}</p>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 self-end sm:self-auto">
                 <button
                   onClick={() => handleEdit(item)}
                   className="size-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all duration-300"

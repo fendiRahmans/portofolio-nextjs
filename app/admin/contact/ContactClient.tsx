@@ -67,9 +67,9 @@ export default function ContactClient({ initialContacts }: ContactClientProps) {
         subtitle="Manage inquiries from your portfolio"
       />
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Search and Filters */}
-        <div className="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="mb-6 flex flex-col gap-4 items-stretch md:flex-row md:items-center justify-between">
           <div className="relative w-full md:w-96">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-[20px]">
               search
@@ -83,14 +83,14 @@ export default function ContactClient({ initialContacts }: ContactClientProps) {
             />
           </div>
 
-          <div className="flex gap-3">
-            <button className="glass-button bg-white/5 hover:bg-white/10 text-white/70 px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+          <div className="flex gap-3 w-full sm:w-auto">
+            <button className="flex-1 sm:flex-initial glass-button bg-white/5 hover:bg-white/10 text-white/70 px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2">
               <span className="material-symbols-outlined text-[18px]">filter_list</span>
-              Filter
+              <span className="hidden sm:inline">Filter</span>
             </button>
-            <button className="glass-button bg-white/5 hover:bg-white/10 text-white/70 px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+            <button className="flex-1 sm:flex-initial glass-button bg-white/5 hover:bg-white/10 text-white/70 px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2">
               <span className="material-symbols-outlined text-[18px]">download</span>
-              Export
+              <span className="hidden sm:inline">Export</span>
             </button>
           </div>
         </div>

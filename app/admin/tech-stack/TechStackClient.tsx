@@ -128,9 +128,9 @@ export default function TechStackClient({ initialData }: TechStackClientProps) {
         subtitle="Manage your core technologies"
       />
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Action Bar */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-6">
           <div className="flex items-center gap-2">
             <span className="text-white/50 text-sm">
               {techStack.length} technologies
@@ -142,7 +142,7 @@ export default function TechStackClient({ initialData }: TechStackClientProps) {
         </div>
 
         {/* Tech Stack Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {techStack.map((item) => (
             <div
               key={item.id}
@@ -162,7 +162,7 @@ export default function TechStackClient({ initialData }: TechStackClientProps) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
                   <button
                     onClick={() => handleEdit(item)}
                     className="size-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all duration-300"

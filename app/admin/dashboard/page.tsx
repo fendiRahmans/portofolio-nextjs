@@ -97,9 +97,9 @@ export default function AdminDashboard() {
       />
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
           {/* Available for Hire Card */}
           <div className="glass-panel rounded-2xl p-6 transition-all duration-300 hover:bg-white/5">
             <div className="flex items-start justify-between">
@@ -169,14 +169,14 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions Section */}
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">
+        <div className="mt-6 sm:mt-8">
+          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[18px] sm:text-[20px]">
               bolt
             </span>
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <button className="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all duration-300 text-left">
               <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-primary text-[20px]">
@@ -216,9 +216,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Contacts Section */}
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">
+        <div className="mt-6 sm:mt-8">
+          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[18px] sm:text-[20px]">
               inbox
             </span>
             Recent Messages
