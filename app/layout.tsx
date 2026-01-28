@@ -11,6 +11,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "DevPortfolio - Glassmorphism Hero",
   description: "Frontend Specialist & Fullstack Developer Portfolio",
+  icons: {
+    icon: [
+      { url: "/images/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/favicon.ico", sizes: "any" },
+    ],
+    apple: "/images/apple-touch-icon.png",
+  },
+  manifest: "/images/site.webmanifest",
 };
 
 export default function RootLayout({

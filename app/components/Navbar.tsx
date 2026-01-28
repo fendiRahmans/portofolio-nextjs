@@ -1,10 +1,17 @@
+import Image from "next/image";
+
 export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center max-w-7xl mx-auto left-0 right-0">
       <div className="flex items-center gap-2">
-        <div className="size-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 text-primary">
-          <span className="material-symbols-outlined text-[20px]">terminal</span>
-        </div>
+        <Image
+          src="/images/favicon-32x32.png"
+          alt="DevPortfolio Logo"
+          width={32}
+          height={32}
+          className="rounded-lg"
+          priority
+        />
         <span className="font-bold tracking-tight text-lg">DevPortfolio</span>
       </div>
       <div className="hidden md:flex items-center gap-4">
