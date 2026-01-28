@@ -60,8 +60,12 @@ export default function CoreValuesEditor({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // Validate required fields
+    if (!formData.icon.trim() || !formData.title.trim() || !formData.description.trim()) {
+      return;
+    }
+
     if (editingIndex !== null) {
       // Edit
       const newValue = [...value];
@@ -78,7 +82,7 @@ export default function CoreValuesEditor({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-white font-medium">Core Values</h3>
-        <Button onClick={handleAdd} icon="add" className="!w-auto !py-2 !px-4 text-sm">
+        <Button type="button" onClick={handleAdd} icon="add" className="!w-auto !py-2 !px-4 text-sm">
           Add Value
         </Button>
       </div>
@@ -136,7 +140,7 @@ export default function CoreValuesEditor({
         onClose={() => setIsDialogOpen(false)}
         title={editingIndex !== null ? "Edit Core Value" : "Add Core Value"}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <div className="space-y-2">
             <Label>Icon (Google Material Symbol)</Label>
             <Input
@@ -176,11 +180,15 @@ export default function CoreValuesEditor({
             >
               Cancel
             </Button>
-            <Button type="submit" className="!w-auto">
+            <Button 
+              type="button" 
+              onClick={handleSubmit} 
+              className="!w-auto"
+            >
               Save
             </Button>
           </div>
-        </form>
+        </div>
       </Dialog>
 
       <DeleteConfirmDialog

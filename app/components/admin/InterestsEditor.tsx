@@ -48,7 +48,7 @@ export default function InterestsEditor({
           onKeyDown={handleKeyDown}
           containerClassName="flex-1"
         />
-        <Button onClick={() => handleAdd()} icon="add" className="!w-auto">
+        <Button type="button" onClick={() => handleAdd()} icon="add" className="!w-auto">
           Add
         </Button>
       </div>
