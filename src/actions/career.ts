@@ -24,7 +24,76 @@ export type CareerState = {
 export async function getCareers() {
   try {
     const data = await db.select().from(career).orderBy(desc(career.createdAt));
-    return { success: true, data };
+    
+    // Parse JSON fields if they're strings
+    const parsedData = data.map(item => {
+      let techStack: string[] = [];
+      let keyProjects: string[] = [];
+      let projectList: any[] = [];
+      let bulletPoints: string[] = [];
+      
+      try {
+        if (item.techStack) {
+          techStack = typeof item.techStack === 'string' 
+            ? JSON.parse(item.techStack) 
+            : Array.isArray(item.techStack) 
+            ? item.techStack 
+            : [];
+        }
+      } catch (e) {
+        console.error("Error parsing techStack:", e);
+        techStack = [];
+      }
+      
+      try {
+        if (item.keyProjects) {
+          keyProjects = typeof item.keyProjects === 'string' 
+            ? JSON.parse(item.keyProjects) 
+            : Array.isArray(item.keyProjects) 
+            ? item.keyProjects 
+            : [];
+        }
+      } catch (e) {
+        console.error("Error parsing keyProjects:", e);
+        keyProjects = [];
+      }
+      
+      try {
+        if (item.projectList) {
+          projectList = typeof item.projectList === 'string' 
+            ? JSON.parse(item.projectList) 
+            : Array.isArray(item.projectList) 
+            ? item.projectList 
+            : [];
+        }
+      } catch (e) {
+        console.error("Error parsing projectList:", e);
+        projectList = [];
+      }
+      
+      try {
+        if (item.bulletPoints) {
+          bulletPoints = typeof item.bulletPoints === 'string' 
+            ? JSON.parse(item.bulletPoints) 
+            : Array.isArray(item.bulletPoints) 
+            ? item.bulletPoints 
+            : [];
+        }
+      } catch (e) {
+        console.error("Error parsing bulletPoints:", e);
+        bulletPoints = [];
+      }
+      
+      return {
+        ...item,
+        techStack,
+        keyProjects,
+        projectList,
+        bulletPoints,
+      };
+    });
+    
+    return { success: true, data: parsedData };
   } catch (error) {
     console.error("Error fetching careers:", error);
     return { success: false, error: "Failed to fetch careers" };
