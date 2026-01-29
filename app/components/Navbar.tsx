@@ -25,7 +25,7 @@ export default function Navbar() {
         </a>
         <a
           className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/5 rounded-full text-sm font-medium transition-all backdrop-blur-md flex items-center gap-2"
-          href="#"
+          href="/chat"
         >
           <span>Let&apos;s Talk</span>
           <span className="material-symbols-outlined text-[16px]">

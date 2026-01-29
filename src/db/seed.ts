@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "./index"; // Assuming db instance is exported from index.ts or similar
-import { users, setting } from "./schema";
+import { users, setting, chatSettings } from "./schema";
 // import { hashPassword } from "../lib/auth"; 
 import { eq } from "drizzle-orm";
 
@@ -37,6 +37,30 @@ async function seedContactSettings() {
   }
 }
 
+async function seedChatSettings() {
+  console.log("Seeding chat settings...");
+
+  const existingChatSettings = await db.select().from(chatSettings);
+
+  if (existingChatSettings.length === 0) {
+    const defaultPrompt = `You are a helpful AI assistant for a professional portfolio website. 
+Answer questions about the portfolio owner's skills, experience, and projects based on the provided context. 
+Keep responses concise and professional. If you don't have specific information, politely say so and suggest leaving a message for the portfolio owner.`;
+
+    await db.insert(chatSettings).values({
+      aiEnabled: 1,
+      aiModel: 'gpt-4o-mini',
+      aiTemperature: 70,
+      systemPrompt: defaultPrompt,
+      autoReplyDelay: 2000,
+    });
+
+    console.log("Chat settings created.");
+  } else {
+    console.log("Chat settings already exist.");
+  }
+}
+
 async function main() {
   console.log("Seeding admin user...");
 
@@ -58,6 +82,9 @@ async function main() {
 
   // Seed contact settings
   await seedContactSettings();
+
+  // Seed chat settings
+  await seedChatSettings();
 }
 
 main()
