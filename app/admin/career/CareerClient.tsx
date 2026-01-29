@@ -59,7 +59,16 @@ interface CareerClientProps {
 }
 
 export default function CareerClient({ initialData }: CareerClientProps) {
-  const [careers, setCareers] = useState<CareerItem[]>(initialData);
+  // Ensure all arrays in items are properly initialized
+  const safeInitialData = initialData.map(item => ({
+    ...item,
+    techStack: Array.isArray(item.techStack) ? item.techStack : [],
+    keyProjects: Array.isArray(item.keyProjects) ? item.keyProjects : [],
+    projectList: Array.isArray(item.projectList) ? item.projectList : [],
+    bulletPoints: Array.isArray(item.bulletPoints) ? item.bulletPoints : [],
+  }));
+
+  const [careers, setCareers] = useState<CareerItem[]>(safeInitialData);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<CareerItem | undefined>();
@@ -69,7 +78,7 @@ export default function CareerClient({ initialData }: CareerClientProps) {
   const router = useRouter();
 
   useEffect(() => {
-    setCareers(initialData);
+    setCareers(safeInitialData);
   }, [initialData]);
 
   // Handle add new career
