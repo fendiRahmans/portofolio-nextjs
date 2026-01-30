@@ -36,7 +36,10 @@ export const SettingFormDialog = ({
 
   // Reset form when dialog opens/closes or initialData changes
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    
+    // Use queueMicrotask to defer state update
+    queueMicrotask(() => {
       if (initialData) {
         setFormData({
           name: initialData.name,
@@ -49,7 +52,7 @@ export const SettingFormDialog = ({
         });
       }
       setErrors({});
-    }
+    });
   }, [isOpen, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {

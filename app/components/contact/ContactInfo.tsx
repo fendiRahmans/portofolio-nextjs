@@ -57,13 +57,13 @@ export default function ContactInfo() {
               Contact
             </p>
             <h2 className="font-display text-2xl sm:text-4xl lg:text-6xl font-bold leading-[1.1] mb-4 sm:mb-8">
-              Let's Build <br />the{" "}
+              Let&apos;s Build <br />the{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
                 Future Together
               </span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-lg font-light leading-relaxed max-w-md mb-6 sm:mb-12">
-              I'm currently specialized in building high-performance web applications. Let's discuss your next project or potential collaboration.
+              I&apos;m currently specialized in building high-performance web applications. Let&apos;s discuss your next project or potential collaboration.
             </p>
           </div>
 

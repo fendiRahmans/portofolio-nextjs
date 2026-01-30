@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "./index"; // Assuming db instance is exported from index.ts or similar
-import { users, setting } from "./schema";
+import { users, setting, chatSettings } from "./schema";
 // import { hashPassword } from "../lib/auth"; 
 import { eq } from "drizzle-orm";
 
@@ -23,6 +23,7 @@ async function seedContactSettings() {
     { name: "contact_linkedin", value: "linkedin.com/in/someone" },
     { name: "contact_github", value: "github.com/someone" },
     { name: "available_for_hire", value: "false" },
+    { name: "chat_enabled", value: "true" },
   ];
 
   for (const settingData of contactSettings) {
@@ -37,6 +38,30 @@ async function seedContactSettings() {
   }
 }
 
+async function seedChatSettings() {
+  console.log("Seeding chat settings...");
+
+  const existingChatSettings = await db.select().from(chatSettings);
+
+  if (existingChatSettings.length === 0) {
+    const defaultPrompt = `You are a helpful AI assistant for a professional portfolio website. 
+Answer questions about the portfolio owner's skills, experience, and projects based on the provided context. 
+Keep responses concise and professional. If you don't have specific information, politely say so and suggest leaving a message for the portfolio owner.`;
+
+    await db.insert(chatSettings).values({
+      aiEnabled: 1,
+      aiModel: 'gpt-4o-mini',
+      aiTemperature: 70,
+      systemPrompt: defaultPrompt,
+      autoReplyDelay: 2000,
+    });
+
+    console.log("Chat settings created.");
+  } else {
+    console.log("Chat settings already exist.");
+  }
+}
+
 async function main() {
   console.log("Seeding admin user...");
 
@@ -45,7 +70,7 @@ async function main() {
   if (existingUser.length > 0) {
     console.log("Admin user already exists.");
   } else {
-    const passwordHash = await hash("admin123");
+    const passwordHash = await hash("AdminPasswordYangMungkinSuLit!!!");
 
     await db.insert(users).values({
       name: "Admin User",
@@ -58,6 +83,9 @@ async function main() {
 
   // Seed contact settings
   await seedContactSettings();
+
+  // Seed chat settings
+  await seedChatSettings();
 }
 
 main()

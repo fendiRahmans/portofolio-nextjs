@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 export default function AdminLayout({
@@ -10,15 +10,8 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
     const token = localStorage.getItem("admin_token");
 
     // Logic 1: If user is logged in and visits login page, redirect to dashboard
@@ -30,7 +23,7 @@ export default function AdminLayout({
     if (pathname !== "/admin/login" && !token) {
       router.push("/admin/login");
     }
-  }, [pathname, isMounted, router]);
+  }, [pathname, router]);
 
   // Optional: Add a loading state or return null while checking to prevent flash of content
   // using a simple "isAuthChecked" state if desired. 

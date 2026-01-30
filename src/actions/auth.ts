@@ -82,3 +82,12 @@ export async function getCurrentUser() {
     return null;
   }
 }
+
+export async function isAuthenticated(): Promise<boolean> {
+  try {
+    const session = await verifySession();
+    return session !== null;
+  } catch (error) {
+    return false;
+  }
+}
