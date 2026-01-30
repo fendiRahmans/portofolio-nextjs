@@ -42,7 +42,10 @@ export const TechStackFormDialog = ({
 
   // Reset form when dialog opens/closes or initialData changes
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    
+    // Use queueMicrotask to defer state update
+    queueMicrotask(() => {
       if (initialData) {
         setFormData({
           title: initialData.title,
@@ -61,7 +64,7 @@ export const TechStackFormDialog = ({
         });
       }
       setErrors({});
-    }
+    });
   }, [isOpen, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {

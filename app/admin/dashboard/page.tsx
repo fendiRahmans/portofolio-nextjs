@@ -6,7 +6,7 @@ import AdminLayout from "../../components/admin/AdminLayout";
 import AdminHeader from "../../components/admin/AdminHeader";
 import StatCard from "../../components/admin/StatCard";
 import ToggleSwitch from "../../components/admin/ToggleSwitch";
-import { getAvailableForHire, toggleAvailableForHire } from "@/actions/settings";
+import { getAvailableForHire, toggleAvailableForHire, getChatEnabled, toggleChatEnabled } from "@/actions/settings";
 import { getTechStackCount } from "@/actions/tech-stack";
 import { getCareerCount, getCareerCountThisMonth } from "@/actions/career";
 import { getContactCount, getRecentContacts, getContactCountThisWeek } from "@/actions/contact";
@@ -24,6 +24,7 @@ type Contact = {
 export default function AdminDashboard() {
   const router = useRouter();
   const [isAvailable, setIsAvailable] = useState(false);
+  const [isChatEnabled, setIsChatEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     totalTechnologies: 0,
@@ -37,8 +38,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       // Fetch all data in parallel
-      const [status, techCount, careerCount, contactCount, contacts, careerThisMonth, contactThisWeek] = await Promise.all([
+      const [status, chatEnabled, techCount, careerCount, contactCount, contacts, careerThisMonth, contactThisWeek] = await Promise.all([
         getAvailableForHire(),
+        getChatEnabled(),
         getTechStackCount(),
         getCareerCount(),
         getContactCount(),
@@ -48,6 +50,7 @@ export default function AdminDashboard() {
       ]);
 
       setIsAvailable(status);
+      setIsChatEnabled(chatEnabled);
       setStats({
         totalTechnologies: techCount,
         totalProjects: careerCount,
@@ -70,6 +73,14 @@ export default function AdminDashboard() {
     const result = await toggleAvailableForHire(checked);
     if (!result.success) {
       setIsAvailable(!checked); // Revert on failure
+    }
+  };
+
+  const handleChatToggle = async (checked: boolean) => {
+    setIsChatEnabled(checked);
+    const result = await toggleChatEnabled(checked);
+    if (!result.success) {
+      setIsChatEnabled(!checked); // Revert on failure
     }
   };
 
@@ -102,6 +113,35 @@ export default function AdminDashboard() {
       <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+          {/* Chat Enabled Card */}
+          <div className="glass-panel rounded-2xl p-6 transition-all duration-300 hover:bg-white/5">
+            <div className="flex items-start justify-between">
+              <div
+                className={`size-12 rounded-xl flex items-center justify-center border border-white/10 ${isChatEnabled ? "bg-blue-500/20" : "bg-white/10"
+                  }`}
+              >
+                <span
+                  className={`material-symbols-outlined text-[24px] ${isChatEnabled ? "text-blue-400" : "text-white/50"
+                    }`}
+                >
+                  chat
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <p className="text-white/50 text-sm">Chat Feature</p>
+              <div className="mt-3">
+                <ToggleSwitch
+                  checked={isChatEnabled}
+                  onChange={handleChatToggle}
+                  label={isLoading ? "Loading..." : (isChatEnabled ? "Enabled" : "Disabled")}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Available for Hire Card */}
           <div className="glass-panel rounded-2xl p-6 transition-all duration-300 hover:bg-white/5">
             <div className="flex items-start justify-between">

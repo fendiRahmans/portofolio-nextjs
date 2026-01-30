@@ -20,7 +20,7 @@ interface CoreValuesEditorProps {
 }
 
 // Separate form component to prevent unnecessary re-renders
-const CoreValueForm = React.memo(({
+const CoreValueFormComponent = ({
   formData,
   onInputChange,
   onSubmit,
@@ -78,7 +78,11 @@ const CoreValueForm = React.memo(({
       </Button>
     </div>
   </div>
-), (prevProps, nextProps) => {
+);
+
+CoreValueFormComponent.displayName = 'CoreValueForm';
+
+const CoreValueForm = React.memo(CoreValueFormComponent, (prevProps, nextProps) => {
   // Custom comparison - re-render only if formData really changed
   return (
     prevProps.formData === nextProps.formData &&

@@ -186,3 +186,60 @@ export async function toggleAvailableForHire(isAvailable: boolean) {
     return { success: false, error: "Failed to update setting" };
   }
 }
+
+export async function getChatEnabled() {
+  noStore(); // Disable caching for this function
+
+  try {
+    console.log("getChatEnabled - Fetching from database...");
+    const result = await db
+      .select()
+      .from(setting)
+      .where(eq(setting.name, "chat_enabled"))
+      .limit(1);
+
+    console.log("getChatEnabled - Result:", result);
+
+    if (result.length === 0) {
+      console.log("getChatEnabled - No setting found, returning true");
+      return true;
+    }
+
+    const isEnabled = result[0].value === "true";
+    console.log("getChatEnabled - Returning:", isEnabled);
+    return isEnabled;
+  } catch (error) {
+    console.error("Error fetching chat_enabled setting:", error);
+    return true;
+  }
+}
+
+export async function toggleChatEnabled(isEnabled: boolean) {
+  try {
+    const existing = await db
+      .select()
+      .from(setting)
+      .where(eq(setting.name, "chat_enabled"))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db
+        .update(setting)
+        .set({ value: String(isEnabled) })
+        .where(eq(setting.name, "chat_enabled"));
+    } else {
+      await db.insert(setting).values({
+        name: "chat_enabled",
+        value: String(isEnabled),
+      });
+    }
+
+    revalidatePath("/");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/chat");
+    return { success: true };
+  } catch (error) {
+    console.error("Error toggling chat_enabled:", error);
+    return { success: false, error: "Failed to update setting" };
+  }
+}

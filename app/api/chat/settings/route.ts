@@ -82,7 +82,7 @@ export async function PATCH(request: NextRequest) {
     const { aiEnabled, aiModel, aiTemperature, systemPrompt, autoReplyDelay } = body;
 
     // Get existing settings
-    let settings = await db.query.chatSettings.findFirst();
+    const settings = await db.query.chatSettings.findFirst();
 
     // Build update object
     const updateData: any = {};

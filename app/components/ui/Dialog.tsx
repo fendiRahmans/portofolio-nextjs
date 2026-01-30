@@ -10,7 +10,7 @@ interface DialogProps {
   size?: "sm" | "md" | "lg";
 }
 
-export const Dialog = React.memo(({
+const DialogComponent = ({
   isOpen,
   onClose,
   title,
@@ -99,4 +99,8 @@ export const Dialog = React.memo(({
       `}</style>
     </div>
   );
-});
+};
+
+DialogComponent.displayName = 'Dialog';
+
+export const Dialog = React.memo(DialogComponent);

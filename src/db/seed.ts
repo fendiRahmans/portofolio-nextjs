@@ -23,6 +23,7 @@ async function seedContactSettings() {
     { name: "contact_linkedin", value: "linkedin.com/in/someone" },
     { name: "contact_github", value: "github.com/someone" },
     { name: "available_for_hire", value: "false" },
+    { name: "chat_enabled", value: "true" },
   ];
 
   for (const settingData of contactSettings) {
@@ -69,7 +70,7 @@ async function main() {
   if (existingUser.length > 0) {
     console.log("Admin user already exists.");
   } else {
-    const passwordHash = await hash("admin123");
+    const passwordHash = await hash("AdminPasswordYangMungkinSuLit!!!");
 
     await db.insert(users).values({
       name: "Admin User",

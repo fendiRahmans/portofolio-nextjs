@@ -1,27 +1,24 @@
 // Visitor Chat Page Client Component
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ChatWindow } from '@/components/chat/ChatWindow';
 import { useChat, useChatSession, useTyping, useAIStatus, usePusher } from '@/hooks';
 import { getConversationChannel, generateVisitorId } from '@/lib/chat/utils';
 
 export default function ChatPageClient() {
-  const [visitorId, setVisitorId] = useState<string>('');
-  const { sessionToken, conversationId, isLoading: sessionLoading, updateConversationId } = useChatSession();
-
-  // Initialize visitor ID
-  useEffect(() => {
+  const [visitorId] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
     const storedVisitorId = localStorage.getItem('chat_visitor_id');
     if (storedVisitorId) {
-      setVisitorId(storedVisitorId);
-    } else {
-      const newVisitorId = generateVisitorId();
-      localStorage.setItem('chat_visitor_id', newVisitorId);
-      setVisitorId(newVisitorId);
+      return storedVisitorId;
     }
-  }, []);
+    const newVisitorId = generateVisitorId();
+    localStorage.setItem('chat_visitor_id', newVisitorId);
+    return newVisitorId;
+  });
+  const { sessionToken, conversationId, isLoading: sessionLoading, updateConversationId } = useChatSession();
 
   // Chat hook
   const {

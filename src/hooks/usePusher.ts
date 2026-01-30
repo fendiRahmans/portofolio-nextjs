@@ -5,68 +5,88 @@ import { useEffect, useRef, useState } from 'react';
 import { getPusherClient, disconnectPusher } from '@/lib/pusher/client';
 import type { Channel } from 'pusher-js';
 
+// Initialize pusher instance outside component to avoid re-initialization
+let pusherInstance: ReturnType<typeof getPusherClient> | null = null;
+
+function getPusherInstance() {
+  if (typeof window === 'undefined') return null;
+  if (!pusherInstance) {
+    pusherInstance = getPusherClient();
+  }
+  return pusherInstance;
+}
+
 export function usePusher(channelName: string | null) {
   const [channel, setChannel] = useState<Channel | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const pusherRef = useRef<ReturnType<typeof getPusherClient> | null>(null);
+  const pusher = getPusherInstance();
 
+  // Set up connection listeners once
   useEffect(() => {
-    if (!channelName) return;
+    if (!pusher) return;
 
-    // Initialize Pusher client
-    if (!pusherRef.current) {
-      pusherRef.current = getPusherClient();
+    const handleConnected = () => {
+      console.log('✅ Pusher connected');
+      setIsConnected(true);
+    };
 
-      // Connection state listeners
-      pusherRef.current.connection.bind('connected', () => {
-        console.log('✅ Pusher connected');
-        setIsConnected(true);
-      });
+    const handleDisconnected = () => {
+      console.log('⚠️ Pusher disconnected');
+      setIsConnected(false);
+    };
 
-      pusherRef.current.connection.bind('disconnected', () => {
-        console.log('⚠️ Pusher disconnected');
-        setIsConnected(false);
-      });
+    const handleError = (err: unknown) => {
+      // Only log if error has meaningful content
+      if (err && typeof err === 'object' && Object.keys(err).length > 0) {
+        // console.error('Pusher connection error:', err);
+      }
+      // Ignore empty error objects (normal connection lifecycle)
+    };
 
-      pusherRef.current.connection.bind('error', (err: any) => {
-        // Only log if error has meaningful content
-        if (err && Object.keys(err).length > 0) {
-          // console.error('Pusher connection error:', err);
-        }
-        // Ignore empty error objects (normal connection lifecycle)
-      });
-    }
+    pusher.connection.bind('connected', handleConnected);
+    pusher.connection.bind('disconnected', handleDisconnected);
+    pusher.connection.bind('error', handleError);
 
-    // Subscribe to channel
-    const subscribedChannel = pusherRef.current.subscribe(channelName);
+    return () => {
+      pusher.connection.unbind('connected', handleConnected);
+      pusher.connection.unbind('disconnected', handleDisconnected);
+      pusher.connection.unbind('error', handleError);
+    };
+  }, [pusher]);
+
+  // Subscribe to channel
+  useEffect(() => {
+    if (!channelName || !pusher) return;
+
+    const subscribedChannel = pusher.subscribe(channelName);
 
     subscribedChannel.bind('pusher:subscription_succeeded', () => {
       console.log(`✅ Successfully subscribed to ${channelName}`);
       setChannel(subscribedChannel);
     });
 
-    subscribedChannel.bind('pusher:subscription_error', (error: any) => {
+    subscribedChannel.bind('pusher:subscription_error', (error: unknown) => {
       // Only log if it's not a 403 (normal for unauthorized channels like admin)
-      if (error?.status !== 403) {
+      const errorStatus = error && typeof error === 'object' && 'status' in error ? (error as { status: number }).status : undefined;
+      if (errorStatus !== 403) {
         console.error(`❌ Failed to subscribe to ${channelName}:`, error);
       }
     });
 
     // Cleanup on unmount or channel change
     return () => {
-      if (pusherRef.current && channelName) {
-        pusherRef.current.unsubscribe(channelName);
+      if (pusher && channelName) {
+        pusher.unsubscribe(channelName);
       }
     };
-  }, [channelName]);
+  }, [channelName, pusher]);
 
   // Cleanup on component unmount
   useEffect(() => {
     return () => {
       disconnectPusher();
-      pusherRef.current = null;
     };
   }, []);
 
-  return { channel, isConnected, pusher: pusherRef.current };
+  return { channel, isConnected, pusher };
 }

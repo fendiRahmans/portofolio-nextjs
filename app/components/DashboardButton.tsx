@@ -1,12 +1,11 @@
-import { cookies } from "next/headers";
+import { isAuthenticated } from "@/actions/auth";
 import Link from "next/link";
 
 export default async function DashboardButton() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin_session")?.value;
+  const loggedIn = await isAuthenticated();
 
   // Only show button if user is logged in
-  if (!session) {
+  if (!loggedIn) {
     return null;
   }
 
