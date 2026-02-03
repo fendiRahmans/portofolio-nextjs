@@ -6,10 +6,14 @@ let dbInstance: any = null;
 
 function getDb() {
   if (!dbInstance) {
-    if (!process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL environment variable is required');
+    // Construct DATABASE_URL from individual env vars if not provided
+    const dbUrl = process.env.DATABASE_URL || 
+      `mysql://${process.env.DB_USER || 'root'}:${process.env.DB_PASSWORD || ''}@${process.env.DB_HOST || '127.0.0.1'}/${process.env.DB_NAME || 'portofolio'}`;
+    
+    if (!dbUrl) {
+      throw new Error('Database configuration is required. Set DATABASE_URL or DB_HOST, DB_USER, DB_PASSWORD, DB_NAME');
     }
-    const connection = mysql.createPool(process.env.DATABASE_URL);
+    const connection = mysql.createPool(dbUrl);
     dbInstance = drizzle(connection, { schema, mode: 'default' });
   }
   return dbInstance;
