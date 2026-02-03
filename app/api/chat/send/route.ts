@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { messages, conversations, chatSettings } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, asc } from 'drizzle-orm';
 import { verifySession } from '@/lib/auth';
 import { triggerPusherEvent } from '@/lib/pusher/server';
 import { getConversationChannel, extractNameFromMessage, extractEmailFromMessage } from '@/lib/chat/utils';
@@ -104,10 +104,11 @@ export async function POST(request: NextRequest) {
               eq(messages.conversationId, Number(activeConversationId)),
               eq(messages.senderType, 'visitor')
             )
-          );
+          )
+          .execute();
         
         console.log(`✅ Update operation result:`, updateResult);
-        console.log(`✅ Marked ${updateResult.rowsAffected ?? 0} messages as read for conversation ${activeConversationId}`);
+        console.log(`✅ Marked ${(updateResult as any).affectedRows ?? 0} messages as read for conversation ${activeConversationId}`);
       } catch (err) {
         console.error('❌ Error marking messages as read:', err);
       }
@@ -155,13 +156,13 @@ export async function POST(request: NextRequest) {
         // Get conversation history for context
         const conversationHistory = await db.query.messages.findMany({
           where: eq(messages.conversationId, activeConversationId),
-          orderBy: (messages, { asc }) => [asc(messages.createdAt)],
+          orderBy: [asc(messages.createdAt)],
           limit: 10, // Last 10 messages for context
         });
 
         const history = conversationHistory
           .slice(0, -1) // Exclude current message
-          .map((msg) => ({
+          .map((msg: any) => ({
             role: (msg.senderType === 'visitor' ? 'user' : 'assistant') as 'user' | 'assistant',
             content: msg.content,
           }));

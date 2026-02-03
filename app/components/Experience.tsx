@@ -12,7 +12,7 @@ export default async function Experience() {
   let hasData = false;
 
   if (careers.length > 0) {
-    const years = careers.flatMap(c => {
+    const years = careers.flatMap((c: any) => {
       const matches = c.year.match(/\d{4}/g);
       return matches ? matches.map(Number) : [];
     });
@@ -24,7 +24,7 @@ export default async function Experience() {
     }
 
     // Check for "Present" or "Now" to set maxYear to current year
-    const hasPresent = careers.some(c =>
+    const hasPresent = careers.some((c: any) =>
       c.year.toLowerCase().includes('present') ||
       c.year.toLowerCase().includes('now')
     );
@@ -61,7 +61,7 @@ export default async function Experience() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(240px,auto)] mb-12">
-        {careers.map((career) => (
+        {careers.map((career: any) => (
           <WorkCard
             key={career.id}
             company={career.title}

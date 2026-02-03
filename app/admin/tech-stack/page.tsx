@@ -7,7 +7,7 @@ export default async function AdminTechStackPage() {
 
   // Transform data to match TechStackItem with number id
   const techStackData: TechStackItem[] = result.success && result.data
-    ? result.data.map(item => ({
+    ? result.data.map((item: any) => ({
       ...item,
       id: item.id // id is already number in data and TechStackItem
     }))

@@ -1,5 +1,7 @@
 // Build AI context from portfolio database
 import { db } from '@/db';
+import { desc } from 'drizzle-orm';
+import { career } from '@/db/schema';
 import type { PortfolioContext } from '@/types/chat';
 
 export async function buildPortfolioContext(): Promise<PortfolioContext> {
@@ -21,7 +23,7 @@ export async function buildPortfolioContext(): Promise<PortfolioContext> {
           techStack: true,
           keyProjects: true,
         },
-        orderBy: (career, { desc }) => [desc(career.year)],
+        orderBy: [desc(career.year)],
       }),
       db.query.about.findFirst({
         columns: {
@@ -36,7 +38,7 @@ export async function buildPortfolioContext(): Promise<PortfolioContext> {
 
     return {
       techStack: techStackData || [],
-      career: careerData?.map(c => ({
+      career: careerData?.map((c: any) => ({
         ...c,
         techStack: c.techStack || undefined,
         keyProjects: c.keyProjects || undefined,

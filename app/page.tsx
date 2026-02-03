@@ -5,6 +5,8 @@ import Experience from "./components/Experience";
 import Dock from "./components/Dock";
 import Background from "./components/Background";
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="bg-background-dark text-white font-display overflow-x-hidden min-h-screen relative selection:bg-primary/30">

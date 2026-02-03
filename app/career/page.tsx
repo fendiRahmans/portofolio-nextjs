@@ -16,7 +16,7 @@ export default async function CareerTimeline() {
   let hasData = false;
 
   if (careers.length > 0) {
-    const years = careers.flatMap(c => {
+    const years = careers.flatMap((c: any) => {
       const matches = c.year.match(/\d{4}/g);
       return matches ? matches.map(Number) : [];
     });
@@ -27,7 +27,7 @@ export default async function CareerTimeline() {
       hasData = true;
     }
 
-    const hasPresent = careers.some(c =>
+    const hasPresent = careers.some((c: any) =>
       c.year.toLowerCase().includes('present') ||
       c.year.toLowerCase().includes('now')
     );
@@ -98,7 +98,7 @@ export default async function CareerTimeline() {
           <div className="relative pl-8 md:pl-12 border-l border-white/5 space-y-12 pb-8">
             <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-primary via-purple-500 to-transparent shadow-[0_0_15px_rgba(25,93,230,0.6)]"></div>
 
-            {careers.map((career) => (
+            {careers.map((career: any) => (
               <TimelineItem
                 key={career.id}
                 year={career.year}

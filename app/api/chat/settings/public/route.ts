@@ -23,7 +23,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: { aiEnabled: settings.aiEnabled },
+      data: { aiEnabled: settings.aiEnabled === 1 },
     } as ApiResponse<{ aiEnabled: boolean }>);
   } catch (error) {
     console.error('Get public settings error:', error);

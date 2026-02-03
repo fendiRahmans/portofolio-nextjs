@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { messages } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, asc } from 'drizzle-orm';
 import type { ApiResponse, Message } from '@/types/chat';
 
 export async function GET(request: NextRequest) {
@@ -19,12 +19,12 @@ export async function GET(request: NextRequest) {
 
     const conversationMessages = await db.query.messages.findMany({
       where: eq(messages.conversationId, parseInt(conversationId)),
-      orderBy: (messages, { asc }) => [asc(messages.createdAt)],
+      orderBy: [asc(messages.createdAt)],
     });
 
     const response: ApiResponse<Message[]> = {
       success: true,
-      data: conversationMessages.map((msg) => ({
+      data: conversationMessages.map((msg: any) => ({
         id: msg.id,
         conversationId: msg.conversationId,
         senderId: msg.senderId,

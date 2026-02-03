@@ -72,7 +72,7 @@ export async function getContactCountThisWeek() {
     firstDayOfWeek.setHours(0, 0, 0, 0);
 
     const data = await db.select().from(contact);
-    const thisWeekData = data.filter(item => {
+    const thisWeekData = data.filter((item: any) => {
       if (!item.createdAt) return false;
       const createdDate = new Date(item.createdAt);
       return createdDate >= firstDayOfWeek;

@@ -4,10 +4,16 @@ import { techStack } from "@/db/schema";
 import { desc } from "drizzle-orm";
 
 export default async function TechStack() {
-  const technologies = await db
-    .select()
-    .from(techStack)
-    .orderBy(desc(techStack.createdAt));
+  let technologies = [];
+  try {
+    technologies = await db
+      .select()
+      .from(techStack)
+      .orderBy(desc(techStack.createdAt));
+  } catch (error) {
+    console.error('Error fetching tech stack:', error);
+    // Fallback empty array
+  }
 
   return (
     <section className="w-full max-w-5xl glass-panel rounded-3xl p-1 md:p-2 relative overflow-hidden mb-24">
@@ -25,7 +31,7 @@ export default async function TechStack() {
         </div>
       </div>
       <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {technologies.map((tech) => {
+        {technologies.map((tech: any) => {
           // Check if colors are hex codes or tailwind classes
           const isHexBg = tech.bgColor.startsWith("#") || tech.bgColor.startsWith("rgb");
           const isHexIcon = tech.iconColor.startsWith("#") || tech.iconColor.startsWith("rgb");

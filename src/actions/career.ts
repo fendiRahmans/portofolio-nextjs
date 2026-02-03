@@ -26,7 +26,7 @@ export async function getCareers() {
     const data = await db.select().from(career).orderBy(desc(career.createdAt));
     
     // Parse JSON fields if they're strings
-    const parsedData = data.map(item => {
+    const parsedData = data.map((item: any) => {
       let techStack: string[] = [];
       let keyProjects: string[] = [];
       let projectList: any[] = [];
@@ -205,7 +205,7 @@ export async function getCareerCountThisMonth() {
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const data = await db.select().from(career);
-    const thisMonthData = data.filter(item => {
+    const thisMonthData = data.filter((item: any) => {
       if (!item.createdAt) return false;
       const createdDate = new Date(item.createdAt);
       return createdDate >= firstDayOfMonth;

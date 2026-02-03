@@ -13,7 +13,7 @@ export default async function AdminSettingsPage() {
 
   // Transform data to match SettingItem with number id
   const settingsData: SettingItem[] = result.success && result.data
-    ? result.data.map(item => {
+    ? result.data.map((item: any) => {
       console.log("Mapping setting item:", item);
       return {
         ...item,

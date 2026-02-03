@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { conversations, messages } from '@/db/schema';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, desc } from 'drizzle-orm';
 import { verifySession } from '@/lib/auth';
 import type { ApiResponse, Conversation } from '@/types/chat';
 
@@ -47,10 +47,10 @@ export async function GET(request: NextRequest) {
 
     // Get last message for each conversation
     const conversationsWithMessages = await Promise.all(
-      allConversations.map(async (conv) => {
+      allConversations.map(async (conv: any) => {
         const lastMessage = await db.query.messages.findFirst({
           where: eq(messages.conversationId, conv.id),
-          orderBy: (messages, { desc }) => [desc(messages.createdAt)],
+          orderBy: [desc(messages.createdAt)],
         });
 
         return {

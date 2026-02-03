@@ -4,7 +4,7 @@ import { verifySession } from '@/lib/auth';
 import { generateAIResponse } from '@/lib/ai/openai';
 import { db } from '@/db';
 import { messages, chatSettings } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, asc } from 'drizzle-orm';
 import type { ApiResponse } from '@/types/chat';
 
 export async function POST(request: NextRequest) {
@@ -44,11 +44,11 @@ export async function POST(request: NextRequest) {
     if (conversationId) {
       const messageHistory = await db.query.messages.findMany({
         where: eq(messages.conversationId, parseInt(conversationId)),
-        orderBy: (messages, { asc }) => [asc(messages.createdAt)],
+        orderBy: [asc(messages.createdAt)],
         limit: 10,
       });
 
-      conversationHistory = messageHistory.map((msg) => ({
+      conversationHistory = messageHistory.map((msg: any) => ({
         role: (msg.senderType === 'visitor' ? 'user' : 'assistant') as 'user' | 'assistant',
         content: msg.content,
       }));

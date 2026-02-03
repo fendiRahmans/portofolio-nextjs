@@ -7,7 +7,7 @@ export default async function AdminCareerPage() {
 
   // Transform data to match CareerItem with string id
   const careerData: CareerItem[] = result.success && result.data
-    ? result.data.map(item => ({
+    ? result.data.map((item: any) => ({
       ...item,
       id: item.id.toString(),
       color: item.color as CareerColor,
